@@ -36,7 +36,7 @@ public class ContaBo {
 	public double depositoCorrente(double valor, ContaCorrente contaC) {
 		contaC.setSaldo(contaC.getSaldo() + valor);
 		
-		BancoDeDados.insereConta(contaC.getNumero(), contaC);
+		BancoDeDados.insereContaCorrente(contaC.getNumero(), contaC);
 		return contaC.getSaldo();
 	}
 

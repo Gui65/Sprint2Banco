@@ -4,6 +4,7 @@ import java.util.UUID;
 
 import br.com.sprintBanco.beans.Cliente;
 import br.com.sprintBanco.beans.ContaPoupanca;
+import br.com.sprintBanco.utils.BancoDeDados;
 
 public class ContaPoupancaBo {
 
@@ -27,6 +28,7 @@ public class ContaPoupancaBo {
 		contaP.setSaldo(0.0);
 		contaP.setCliente(cliente);
 		
+		BancoDeDados.insereContaPoupanca(contaP.getNumero(), contaP);
 		
 		return contaP;
 

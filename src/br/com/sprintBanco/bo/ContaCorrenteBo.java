@@ -25,7 +25,7 @@ public class ContaCorrenteBo {
 		contaC.setSaldo(0.0);
 		contaC.setCliente(cliente);
 		
-		BancoDeDados.insereConta(contaC.getNumero(), contaC);
+		BancoDeDados.insereContaCorrente(contaC.getNumero(), contaC);
 		
 		return contaC;
 		

@@ -94,7 +94,7 @@ public class Main {
 
 				System.out.print("Digite o número da sua conta >>>");
 				String numeroConta = ler.next();
-				contaC = (ContaCorrente) BancoDeDados.buscaContaPorNumero(numeroConta);
+				contaC = (ContaCorrente) BancoDeDados.buscaContaCorrentePorNumero(numeroConta);
 
 				if (contaC == null) {
 					System.out.println("Você não tem uma conta corrente!");
@@ -106,7 +106,7 @@ public class Main {
 						System.out.println("-------------------" + "\nMENU CONTA CORRENTE" + "\n---------------------");
 						System.out.println("1 - Sacar");
 						System.out.println("2 - Depositar");
-						System.out.println("3 - Transferir para conta Poupança");
+						System.out.println("3 - Transferir");
 						System.out.println("4 - Consultar");
 						System.out.println("5 - Sair");
 
@@ -134,8 +134,9 @@ public class Main {
 								System.out.println("Digite o número da conta que quer transferir: ");
 								numeroContaRecebe = ler.next();
 								ContaCorrente contaRecebe = (ContaCorrente) BancoDeDados
-										.buscaContaPorNumero(numeroContaRecebe);
+										.buscaContaCorrentePorNumero(numeroContaRecebe);
 								System.out.println(conta.transferirCorrente(v, contaC, contaRecebe));
+								System.out.println("Transferido com sucesso para "+ contaRecebe.getCliente().getNome());
 							}
 
 							break;
