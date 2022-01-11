@@ -30,7 +30,7 @@ public class Main {
 		ContaPoupancaBo cadastraContaP = new ContaPoupancaBo();
 		ContaBo conta = new ContaBo();
 		PixBo cadastrarPix = new PixBo();
-		
+
 		Cliente cliente = new Cliente();
 		Endereco endereco = new Endereco();
 		Pix pix = new Pix();
@@ -39,8 +39,7 @@ public class Main {
 
 		contaC = null;
 		contaP = null;
-		pix = null;
-		
+
 		int op;
 		do {
 			System.out.println("O que deseja fazer: ");
@@ -82,7 +81,7 @@ public class Main {
 							+ "\n1-Conta Corrente \n2-Conta Poupança");
 					i = ler.nextInt();
 					if (i == 1) {
-						contaC = cadastraContaC.CriarContaCorrente(cliente, pix);
+						contaC = cadastraContaC.CriarContaCorrente(cliente);
 						System.out.println("Numero: " + contaC.getNumero());
 					} else if (i == 2) {
 						contaP = cadastraContaP.CriarContaPoupanca(cliente);
@@ -114,7 +113,8 @@ public class Main {
 						System.out.println("2 - Depositar");
 						System.out.println("3 - Transferir");
 						System.out.println("4 - Consultar");
-						System.out.println("5 - Sair");
+						System.out.println("5 - Cadastrar Pix");
+						System.out.println("6 - Sair");
 
 						opcaoC = ler.nextInt();
 						switch (opcaoC) {
@@ -158,10 +158,40 @@ public class Main {
 						case 4:
 							System.out.println("Valor: " + conta.consultaCorrente(contaC));
 							break;
-						case 5: 
-							
+						case 5:
+							int opPix;
+							System.out.println(
+									"Deseja cadastrar uma chave do tipo: \n1-Email \n2-CPF \n3-TELEFONE \n4-ALEÁTORIA");
+							opPix = ler.nextInt();
+							if (opPix >= 1 && opPix <= 4) {
+								if (opPix == 1) {
+									String email;
+									System.out.print("Digite seu email >>> ");
+									email = ler.next();
+
+									pix = cadastrarPix.cadastraPixEmail(email);
+
+								} else if (opPix == 2) {
+									pix = cadastrarPix.cadastraPixCpf(contaC);
+
+								} else if (opPix == 3) {
+									String telefone;
+									System.out.print("Digite seu telefone >>> ");
+									telefone = ler.next();
+
+									pix = cadastrarPix.cadastraPixTelefone(telefone);
+								} else if (opPix == 4) {
+									pix = cadastrarPix.cadastraPixAleatorio();
+								}
+								System.out.println("Cadastrado com sucesso");
+								System.out.println("Seu tipo de chave é " + pix.tipoChave);
+								contaC.setPix(pix);
+							}else {
+								System.out.println("Opção invalida");
+								continue;
+							}
 						}
-					} while (opcaoC != 5);
+					} while (opcaoC != 6);
 				}
 				break;
 			case 3:

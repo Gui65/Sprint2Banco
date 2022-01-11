@@ -17,7 +17,7 @@ public class ContaCorrenteBo {
 		return contaCorrente.getSaldo();
 	}
 	
-	public ContaCorrente CriarContaCorrente(Cliente cliente, Pix pix) {
+	public ContaCorrente CriarContaCorrente(Cliente cliente) {
 		
 		ContaCorrente contaC = new ContaCorrente();
 		
@@ -25,7 +25,6 @@ public class ContaCorrenteBo {
 		contaC.setNumero(UUID.randomUUID().toString());
 		contaC.setSaldo(0.0);
 		contaC.setCliente(cliente);
-		contaC.setPix(pix);
 		BancoDeDados.insereContaCorrente(contaC.getNumero(), contaC);
 		
 		return contaC;
