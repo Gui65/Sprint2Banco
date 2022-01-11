@@ -7,6 +7,23 @@ public class Conta {
 	protected double saldo;
 	protected Cliente cliente;
 	protected TipoCliente tipo;
+	protected Pix pix;
+	
+	public TipoCliente getTipo() {
+		return tipo;
+	}
+
+	public void setTipo(TipoCliente tipo) {
+		this.tipo = tipo;
+	}
+
+	public Pix getPix() {
+		return pix;
+	}
+
+	public void setPix(Pix pix) {
+		this.pix = pix;
+	}
 
 	public String getIdConta() {
 		return idConta;

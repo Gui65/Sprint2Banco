@@ -7,11 +7,14 @@ public class Pix {
 	public double valor;
 	public String data;
 	public String conteudoChave;
-	public boolean isAtivado;
-	public Conta conta;
-
-//	public boolean AtivarChave(TipoChavePix tipo, String conteudoChave, boolean isAtivado) {
-//
-//	}
-
+	public boolean isAtivado = false;
+	private ContaCorrente contaC;
+	
+	public ContaCorrente getContaC() {
+		return contaC;
+	}
+	public void setContaC(ContaCorrente contaC) {
+		this.contaC = contaC;
+	}
+	
 }

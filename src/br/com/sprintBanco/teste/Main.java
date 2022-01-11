@@ -7,11 +7,13 @@ import br.com.sprintBanco.beans.Conta;
 import br.com.sprintBanco.beans.ContaCorrente;
 import br.com.sprintBanco.beans.ContaPoupanca;
 import br.com.sprintBanco.beans.Endereco;
+import br.com.sprintBanco.beans.Pix;
 import br.com.sprintBanco.bo.ClienteBo;
 import br.com.sprintBanco.bo.ContaBo;
 import br.com.sprintBanco.bo.ContaCorrenteBo;
 import br.com.sprintBanco.bo.ContaPoupancaBo;
 import br.com.sprintBanco.bo.EnderecoBo;
+import br.com.sprintBanco.bo.PixBo;
 import br.com.sprintBanco.utils.BancoDeDados;
 
 public class Main {
@@ -27,15 +29,18 @@ public class Main {
 		ContaCorrenteBo cadastraContaC = new ContaCorrenteBo();
 		ContaPoupancaBo cadastraContaP = new ContaPoupancaBo();
 		ContaBo conta = new ContaBo();
-
+		PixBo cadastrarPix = new PixBo();
+		
 		Cliente cliente = new Cliente();
 		Endereco endereco = new Endereco();
+		Pix pix = new Pix();
 		ContaCorrente contaC = new ContaCorrente();
 		ContaPoupanca contaP = new ContaPoupanca();
 
 		contaC = null;
 		contaP = null;
-
+		pix = null;
+		
 		int op;
 		do {
 			System.out.println("O que deseja fazer: ");
@@ -77,7 +82,7 @@ public class Main {
 							+ "\n1-Conta Corrente \n2-Conta Poupança");
 					i = ler.nextInt();
 					if (i == 1) {
-						contaC = cadastraContaC.CriarContaCorrente(cliente);
+						contaC = cadastraContaC.CriarContaCorrente(cliente, pix);
 						System.out.println("Numero: " + contaC.getNumero());
 					} else if (i == 2) {
 						contaP = cadastraContaP.CriarContaPoupanca(cliente);
@@ -153,6 +158,8 @@ public class Main {
 						case 4:
 							System.out.println("Valor: " + conta.consultaCorrente(contaC));
 							break;
+						case 5: 
+							
 						}
 					} while (opcaoC != 5);
 				}

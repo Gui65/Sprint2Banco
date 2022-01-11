@@ -4,6 +4,7 @@ import java.util.UUID;
 
 import br.com.sprintBanco.beans.Cliente;
 import br.com.sprintBanco.beans.ContaCorrente;
+import br.com.sprintBanco.beans.Pix;
 import br.com.sprintBanco.utils.BancoDeDados;
 
 public class ContaCorrenteBo {
@@ -16,7 +17,7 @@ public class ContaCorrenteBo {
 		return contaCorrente.getSaldo();
 	}
 	
-	public ContaCorrente CriarContaCorrente(Cliente cliente) {
+	public ContaCorrente CriarContaCorrente(Cliente cliente, Pix pix) {
 		
 		ContaCorrente contaC = new ContaCorrente();
 		
@@ -24,7 +25,7 @@ public class ContaCorrenteBo {
 		contaC.setNumero(UUID.randomUUID().toString());
 		contaC.setSaldo(0.0);
 		contaC.setCliente(cliente);
-		
+		contaC.setPix(pix);
 		BancoDeDados.insereContaCorrente(contaC.getNumero(), contaC);
 		
 		return contaC;
