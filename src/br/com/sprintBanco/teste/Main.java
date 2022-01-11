@@ -134,7 +134,7 @@ public class Main {
 							String numeroContaRecebe;
 							System.out.println("Qual valor deseja transferir >>> ");
 							v = ler.nextDouble();
-							System.out.println("Deseja transferir para uma conta tipo: \n1-Corrente \n2-Poupança");
+							System.out.println("Deseja transferir para uma conta tipo: \n1-Corrente \n2-Poupança \3-PIX");
 							escolha = ler.nextInt();
 							if (escolha == 1) {
 								System.out.println("Digite o número da conta que quer transferir: ");
@@ -152,6 +152,13 @@ public class Main {
 								System.out.println(conta.transferirCorrentePoupanca(v, contaC, contaRecebe));
 								System.out
 										.println("Transferido com sucesso para " + contaRecebe.getCliente().getNome());
+							} else if (escolha == 3) {
+								System.out.println("Digite Pix: ");
+								numeroContaRecebe = ler.next();
+								ContaCorrente contaRecebe = BancoDeDados.buscaContaCorrentePorPix(numeroContaRecebe);
+								System.out.println(conta.transferirCorrente(v, contaC, contaRecebe));
+								System.out
+								.println("Transferido com sucesso para " + contaRecebe.getCliente().getNome());
 							}
 
 							break;
@@ -186,7 +193,7 @@ public class Main {
 								System.out.println("Cadastrado com sucesso");
 								System.out.println("Seu tipo de chave é " + pix.tipoChave);
 								contaC.setPix(pix);
-							}else {
+							} else {
 								System.out.println("Opção invalida");
 								continue;
 							}

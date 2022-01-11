@@ -12,7 +12,7 @@ public class BancoDeDados {
 	// ARMAZENA APENAS CONTAS CORRENTES
 	private static Map<String, ContaCorrente> BANCO_DE_DADOS_CORRENTE = new HashMap<String, ContaCorrente>();
 
-	public static Conta buscaContaCorrentePorNumero(String numeroConta) {
+	public static ContaCorrente buscaContaCorrentePorNumero(String numeroConta) {
 		ContaCorrente contaC = BancoDeDados.BANCO_DE_DADOS_CORRENTE.get(numeroConta);
 		if (contaC == null) {
 			System.out.println("Conta não encontrada");
@@ -25,10 +25,27 @@ public class BancoDeDados {
 		BancoDeDados.BANCO_DE_DADOS_CORRENTE.put(numeroConta, contaC);
 	}
 
+	public static ContaCorrente buscaContaCorrentePorPix(String chavePix) { //BUSCA UM VALOR QUE INSERIDO
+		ContaCorrente contaC = new ContaCorrente();
+		contaC = null;
+		
+		for (Map.Entry<String, ContaCorrente> entry : BANCO_DE_DADOS_CORRENTE.entrySet()) {
+
+			ContaCorrente value = entry.getValue();
+			
+			if(value.getPix().conteudoChave.equals(chavePix)) { //CORRE O HASHMAP ATÉ ENCONTRAR O VALOR
+				contaC = value;
+				break;
+			}
+		}
+		
+		return contaC;
+	}
+
 	// ARMAZENA APENAS CONTAS POUPANÇAS
 	private static Map<String, ContaPoupanca> BANCO_DE_DADOS_POUPANCA = new HashMap<String, ContaPoupanca>();
 
-	public static Conta buscaContaPoupancaPorNumero(String numeroConta) {
+	public static ContaPoupanca buscaContaPoupancaPorNumero(String numeroConta) {
 		ContaPoupanca contaP = BancoDeDados.BANCO_DE_DADOS_POUPANCA.get(numeroConta);
 		if (contaP == null) {
 			System.out.println("Conta não encontrada");
