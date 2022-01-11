@@ -81,6 +81,7 @@ public class Main {
 						System.out.println("Numero: " + contaC.getNumero());
 					} else if (i == 2) {
 						contaP = cadastraContaP.CriarContaPoupanca(cliente);
+						System.out.println("Numero: " + contaP.getNumero());
 					}
 					System.out.println("Deseja criar outra conta? (S/N)");
 					repete = ler.next();
@@ -90,11 +91,11 @@ public class Main {
 				break;
 
 			case 2:
-				int opcao;
+				int opcaoC;
 
 				System.out.print("Digite o número da sua conta >>>");
-				String numeroConta = ler.next();
-				contaC = (ContaCorrente) BancoDeDados.buscaContaCorrentePorNumero(numeroConta);
+				String numeroContaC = ler.next();
+				contaC = (ContaCorrente) BancoDeDados.buscaContaCorrentePorNumero(numeroContaC);
 
 				if (contaC == null) {
 					System.out.println("Você não tem uma conta corrente!");
@@ -110,8 +111,8 @@ public class Main {
 						System.out.println("4 - Consultar");
 						System.out.println("5 - Sair");
 
-						opcao = ler.nextInt();
-						switch (opcao) {
+						opcaoC = ler.nextInt();
+						switch (opcaoC) {
 						case 1:
 							System.out.println("Qual valor deseja sacar >>> ");
 							v = ler.nextDouble();
@@ -136,7 +137,17 @@ public class Main {
 								ContaCorrente contaRecebe = (ContaCorrente) BancoDeDados
 										.buscaContaCorrentePorNumero(numeroContaRecebe);
 								System.out.println(conta.transferirCorrente(v, contaC, contaRecebe));
-								System.out.println("Transferido com sucesso para "+ contaRecebe.getCliente().getNome());
+								System.out
+										.println("Transferido com sucesso para " + contaRecebe.getCliente().getNome());
+							} else if (escolha == 2) {
+								System.out.println("Digite o número da conta que quer transferir: ");
+								numeroContaRecebe = ler.next();
+								ContaPoupanca contaRecebe = (ContaPoupanca) BancoDeDados
+										.buscaContaPoupancaPorNumero(numeroContaRecebe);
+								System.out.println(conta.transferirCorrentePoupanca(v, contaC, contaRecebe));
+								System.out
+										.println("Transferido com sucesso para " + contaRecebe.getCliente().getNome());
+
 							}
 
 							break;
@@ -144,10 +155,16 @@ public class Main {
 							System.out.println("Valor: " + conta.consultaCorrente(contaC));
 							break;
 						}
-					} while (opcao != 5);
+					} while (opcaoC != 5);
 				}
 				break;
 			case 3:
+				int opcaoP;
+
+				System.out.print("Digite o número da sua conta >>>");
+				String numeroContaP = ler.next();
+				contaC = (ContaCorrente) BancoDeDados.buscaContaCorrentePorNumero(numeroContaP);
+
 				if (contaP == null) {
 					System.out.println("Você não tem uma conta poupança!");
 				} else {
@@ -159,8 +176,8 @@ public class Main {
 						System.out.println("3 - Transferir para conta Corrente");
 						System.out.println("4 - Consultar");
 						System.out.println("5 - Sair");
-						opcao = ler.nextInt();
-						switch (opcao) {
+						opcaoP = ler.nextInt();
+						switch (opcaoP) {
 						case 1:
 							System.out.println("Qual valor deseja sacar >>> ");
 							v = ler.nextDouble();
@@ -181,7 +198,7 @@ public class Main {
 							System.out.println("Valor: " + conta.consultaPoupanca(contaP));
 							break;
 						}
-					} while (opcao != 4);
+					} while (opcaoP != 4);
 					break;
 				}
 			}

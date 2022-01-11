@@ -20,22 +20,36 @@ public class ContaBo {
 	}
 
 	public String transferirCorrente(double valor, ContaCorrente contaC, ContaCorrente contaRecebe) {
-		if(contaRecebe != null) {
+		if (contaRecebe != null) {
 			if (valor <= contaC.getSaldo()) {
-			contaRecebe.setSaldo(contaRecebe.getSaldo() + valor);
-			contaC.setSaldo(contaC.getSaldo() - valor);
-			return "Transferência realizada com sucesso!";
+				contaRecebe.setSaldo(contaRecebe.getSaldo() + valor);
+				contaC.setSaldo(contaC.getSaldo() - valor);
+				return "Transferência realizada com sucesso!";
+			} else {
+				return "Saldo insuficiente " + contaC.getSaldo();
+			}
 		} else {
-			return "Saldo insuficiente " + contaC.getSaldo();
+			return "Conta não existe";
 		}
-	}else {
-		return "Conta não existe";
 	}
-}
+
+	public String transferirCorrentePoupanca(double valor, ContaCorrente contaC, ContaPoupanca contaRecebe) {
+		if (contaRecebe != null) {
+			if ((valor + 5.60) <= contaC.getSaldo()) {
+				contaRecebe.setSaldo(contaRecebe.getSaldo() + valor);
+				contaC.setSaldo(contaC.getSaldo() - (valor + 5.60));
+				return "Transferência realizada com sucesso! \nCobrado uma taxa de R$5.60";
+			} else {
+				return "Saldo insuficiente " + contaC.getSaldo();
+			}
+		} else {
+			return "Conta não existe";
+		}
+	}
 
 	public double depositoCorrente(double valor, ContaCorrente contaC) {
 		contaC.setSaldo(contaC.getSaldo() + valor);
-		
+
 		BancoDeDados.insereContaCorrente(contaC.getNumero(), contaC);
 		return contaC.getSaldo();
 	}
@@ -54,17 +68,31 @@ public class ContaBo {
 		}
 	}
 
-	public String transferirPoupanca(double valor, ContaPoupanca contaP, ContaCorrente contaC) {
-		if (contaC != null) {
+	public String transferirPoupanca(double valor, ContaPoupanca contaP, ContaPoupanca contaRecebe) {
+		if (contaRecebe != null) {
 			if (valor <= contaP.getSaldo()) {
-				contaC.setSaldo(contaC.getSaldo() + valor);
+				contaRecebe.setSaldo(contaRecebe.getSaldo() + valor);
 				contaP.setSaldo(contaP.getSaldo() - valor);
 				return "Transferência realizada com sucesso!";
 			} else {
-				return "Saldo insuficiente " + contaC.getSaldo();
+				return "Saldo insuficiente " + contaP.getSaldo();
 			}
 		} else {
-			return "Você não tem uma conta corrente";
+			return "Conta não existe";
+		}
+	}
+	
+	public String transferirPoupancaCorrente(double valor, ContaPoupanca contaP, ContaCorrente contaRecebe) {
+		if (contaRecebe != null) {
+			if ((valor + 5.60) <= contaP.getSaldo()) {
+				contaRecebe.setSaldo(contaRecebe.getSaldo() + valor);
+				contaP.setSaldo(contaP.getSaldo() - (valor + 5.60));
+				return "Transferência realizada com sucesso! \nCobrado uma taxa de R$5.60";
+			} else {
+				return "Saldo insuficiente " + contaP.getSaldo();
+			}
+		} else {
+			return "Conta não existe";
 		}
 	}
 
