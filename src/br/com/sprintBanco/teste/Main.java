@@ -3,6 +3,7 @@ package br.com.sprintBanco.teste;
 import java.util.Scanner;
 
 import br.com.sprintBanco.beans.Cliente;
+import br.com.sprintBanco.beans.Conta;
 import br.com.sprintBanco.beans.ContaCorrente;
 import br.com.sprintBanco.beans.ContaPoupanca;
 import br.com.sprintBanco.beans.Endereco;
@@ -17,7 +18,7 @@ public class Main {
 
 	public static void main(String[] args) {
 
-		String cpf, nome, dt;
+		String cpf, nome, dt, repete;
 
 		Scanner ler = new Scanner(System.in);
 
@@ -34,10 +35,6 @@ public class Main {
 
 		contaC = null;
 		contaP = null;
-
-		System.out.println("Nome: " + cliente.getNome());
-
-		String repete;
 
 		int op;
 		do {
@@ -104,7 +101,8 @@ public class Main {
 				} else {
 					do {
 						double v;
-						System.out.println("LOGADO COM SUCESSO! \nSeja Bem vindo novamente: "+contaC.getCliente().getNome());
+						System.out.println(
+								"LOGADO COM SUCESSO! \nSeja Bem vindo novamente: " + contaC.getCliente().getNome());
 						System.out.println("-------------------" + "\nMENU CONTA CORRENTE" + "\n---------------------");
 						System.out.println("1 - Sacar");
 						System.out.println("2 - Depositar");
@@ -126,9 +124,20 @@ public class Main {
 							System.out.println("Deposito realizado com sucesso!");
 							break;
 						case 3:
+							int escolha;
+							String numeroContaRecebe;
 							System.out.println("Qual valor deseja transferir >>> ");
 							v = ler.nextDouble();
-							System.out.println(conta.transferirCorrente(v, contaC, contaP));
+							System.out.println("Deseja transferir para uma conta tipo: \n1-Corrente \n2-Poupança");
+							escolha = ler.nextInt();
+							if (escolha == 1) {
+								System.out.println("Digite o número da conta que quer transferir: ");
+								numeroContaRecebe = ler.next();
+								ContaCorrente contaRecebe = (ContaCorrente) BancoDeDados
+										.buscaContaPorNumero(numeroContaRecebe);
+								System.out.println(conta.transferirCorrente(v, contaC, contaRecebe));
+							}
+
 							break;
 						case 4:
 							System.out.println("Valor: " + conta.consultaCorrente(contaC));
@@ -163,7 +172,6 @@ public class Main {
 							System.out.println("Deposito realizado com sucesso!");
 							break;
 						case 3:
-
 							System.out.println("Qual valor deseja transferir >>> ");
 							v = ler.nextDouble();
 							System.out.println(conta.transferirPoupanca(v, contaP, contaC));

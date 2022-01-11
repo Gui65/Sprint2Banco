@@ -19,17 +19,17 @@ public class ContaBo {
 		}
 	}
 
-	public String transferirCorrente(double valor, ContaCorrente contaC, ContaPoupanca contaP) {
-		if(contaP != null) {
+	public String transferirCorrente(double valor, ContaCorrente contaC, ContaCorrente contaRecebe) {
+		if(contaRecebe != null) {
 			if (valor <= contaC.getSaldo()) {
-			contaP.setSaldo(contaP.getSaldo() + valor);
+			contaRecebe.setSaldo(contaRecebe.getSaldo() + valor);
 			contaC.setSaldo(contaC.getSaldo() - valor);
 			return "Transferência realizada com sucesso!";
 		} else {
 			return "Saldo insuficiente " + contaC.getSaldo();
 		}
 	}else {
-		return "Você não tem uma conta poupança";
+		return "Conta não existe";
 	}
 }
 
