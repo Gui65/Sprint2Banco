@@ -147,7 +147,6 @@ public class Main {
 								System.out.println(conta.transferirCorrentePoupanca(v, contaC, contaRecebe));
 								System.out
 										.println("Transferido com sucesso para " + contaRecebe.getCliente().getNome());
-
 							}
 
 							break;
@@ -163,7 +162,7 @@ public class Main {
 
 				System.out.print("Digite o número da sua conta >>>");
 				String numeroContaP = ler.next();
-				contaC = (ContaCorrente) BancoDeDados.buscaContaCorrentePorNumero(numeroContaP);
+				contaP = (ContaPoupanca) BancoDeDados.buscaContaPoupancaPorNumero(numeroContaP);
 
 				if (contaP == null) {
 					System.out.println("Você não tem uma conta poupança!");
@@ -190,9 +189,29 @@ public class Main {
 							System.out.println("Deposito realizado com sucesso!");
 							break;
 						case 3:
+							int escolha;
+							String numeroContaRecebe;
 							System.out.println("Qual valor deseja transferir >>> ");
 							v = ler.nextDouble();
-							System.out.println(conta.transferirPoupanca(v, contaP, contaC));
+							System.out.println("Deseja transferir para uma conta tipo: \n1-Poupança \n2-Corrente");
+							escolha = ler.nextInt();
+							if (escolha == 1) {
+								System.out.println("Digite o número da conta que quer transferir: ");
+								numeroContaRecebe = ler.next();
+								ContaPoupanca contaRecebe = (ContaPoupanca) BancoDeDados
+										.buscaContaPoupancaPorNumero(numeroContaRecebe);
+								System.out.println(conta.transferirPoupanca(v, contaP, contaRecebe));
+								System.out
+										.println("Transferido com sucesso para " + contaRecebe.getCliente().getNome());
+							} else if (escolha == 2) {
+								System.out.println("Digite o número da conta que quer transferir: ");
+								numeroContaRecebe = ler.next();
+								ContaCorrente contaRecebe = (ContaCorrente) BancoDeDados
+										.buscaContaCorrentePorNumero(numeroContaRecebe);
+								System.out.println(conta.transferirPoupancaCorrente(v, contaP, contaRecebe));
+								System.out
+										.println("Transferido com sucesso para " + contaRecebe.getCliente().getNome());
+							}
 							break;
 						case 4:
 							System.out.println("Valor: " + conta.consultaPoupanca(contaP));
