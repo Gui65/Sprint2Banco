@@ -52,9 +52,16 @@ public class Main {
 				do {
 					int i;
 					System.out.println("----------------------" + "\nCadastro de Cliente" + "\n----------------------");
+					do{
 					System.out.print("Digite seu CPF >>> ");
 					ler.nextLine();
 					cpf = ler.nextLine();
+					if(cadastrarCliente.validacaoCpf(cpf) == false) {
+						System.out.println("CPF INVALÍDO. DIGITE NOVAMENTE: ");
+					}else {
+						System.out.println("CPF VALIDO.");
+					}
+					}while(cadastrarCliente.validacaoCpf(cpf) == false);
 					System.out.print("Digite seu NOME >>> ");
 					nome = ler.nextLine();
 					System.out.print("Informe sua Data de Nascimento >>> ");
@@ -82,10 +89,10 @@ public class Main {
 					i = ler.nextInt();
 					if (i == 1) {
 						contaC = cadastraContaC.CriarContaCorrente(cliente);
-						System.out.println("Numero: " + contaC.getNumero());
+						System.out.println("Numero da sua conta: " + contaC.getNumero());
 					} else if (i == 2) {
 						contaP = cadastraContaP.CriarContaPoupanca(cliente);
-						System.out.println("Numero: " + contaP.getNumero());
+						System.out.println("Numero da sua conta: " + contaP.getNumero());
 					}
 					System.out.println("Deseja criar outra conta? (S/N)");
 					repete = ler.next();
@@ -97,7 +104,7 @@ public class Main {
 			case 2:
 				int opcaoC;
 
-				System.out.print("Digite o número da sua conta >>>");
+				System.out.print("Digite o número da sua conta >>> ");
 				String numeroContaC = ler.next();
 				contaC = (ContaCorrente) BancoDeDados.buscaContaCorrentePorNumero(numeroContaC);
 
@@ -191,7 +198,7 @@ public class Main {
 									pix = cadastrarPix.cadastraPixAleatorio();
 								}
 								System.out.println("Cadastrado com sucesso");
-								System.out.println("Seu tipo de chave é " + pix.tipoChave);
+								System.out.println("Seu tipo de chave é " + pix.tipoChave +"\nChave: "+ contaC.getPix());
 								contaC.setPix(pix);
 							} else {
 								System.out.println("Opção invalida");

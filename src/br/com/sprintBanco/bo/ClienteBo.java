@@ -23,5 +23,17 @@ public class ClienteBo {
 
 	}
 
-	
+	public boolean validacaoCpf(String cpf) {
+
+		boolean retorno = false;
+
+		if (!cpf.matches("[0-9]*") || cpf.length() != 11) {
+			retorno = false;
+		} else {
+			retorno = true;
+		}
+
+		return retorno;
+	}
+
 }
