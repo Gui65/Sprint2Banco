@@ -49,54 +49,64 @@ public class Main {
 			op = ler.nextInt();
 			switch (op) {
 			case 1:
+				int i;
+				System.out.println("----------------------" + "\nCadastro de Cliente" + "\n----------------------");
 				do {
-					int i;
-					System.out.println("----------------------" + "\nCadastro de Cliente" + "\n----------------------");
-					do{
 					System.out.print("Digite seu CPF >>> ");
 					ler.nextLine();
 					cpf = ler.nextLine();
-					if(cadastrarCliente.validacaoCpf(cpf) == false) {
+					if (cadastrarCliente.validacaoCpf(cpf) == false) {
 						System.out.println("CPF INVALÍDO. DIGITE NOVAMENTE: ");
-					}else {
+					} else {
 						System.out.println("CPF VALIDO.");
 					}
-					}while(cadastrarCliente.validacaoCpf(cpf) == false);
-					System.out.print("Digite seu NOME >>> ");
-					nome = ler.nextLine();
-					System.out.print("Informe sua Data de Nascimento >>> ");
-					dt = ler.nextLine();
+				} while (cadastrarCliente.validacaoCpf(cpf) == false);
+				System.out.print("Digite seu NOME >>> ");
+				nome = ler.nextLine();
+				System.out.print("Informe sua Data de Nascimento >>> ");
+				dt = ler.nextLine();
 
-					String log, numCasa, cep, bairro, cidade, estado;
+				String log, numCasa, cep, bairro, cidade, estado;
 
-					System.out.print("Digite seu Logradouro >>> ");
-					log = ler.nextLine();
-					System.out.print("Digite o Nº da sua casa >>> ");
-					numCasa = ler.nextLine();
-					System.out.print("Informe seu CEP >>> ");
-					cep = ler.nextLine();
-					System.out.print("Digite seu Bairro >>> ");
-					bairro = ler.nextLine();
-					System.out.print("Digite sua Cidade >>> ");
-					cidade = ler.nextLine();
-					System.out.print("Informe seu Estado >>> ");
-					estado = ler.nextLine();
+				System.out.print("Digite seu Logradouro >>> ");
+				log = ler.nextLine();
+				System.out.print("Digite o Nº da sua casa >>> ");
+				numCasa = ler.nextLine();
+				System.out.print("Informe seu CEP >>> ");
+				cep = ler.nextLine();
+				System.out.print("Digite seu Bairro >>> ");
+				bairro = ler.nextLine();
+				System.out.print("Digite sua Cidade >>> ");
+				cidade = ler.nextLine();
+				System.out.print("Informe seu Estado >>> ");
+				estado = ler.nextLine();
 
-					endereco = cadastrarEndereco.CadastraEndereco(log, numCasa, cep, bairro, cidade, estado);
-					cliente = cadastrarCliente.CadastrarDados(cpf, nome, dt, endereco);
-					System.out.print("Olá " + cliente.getNome() + " Deseja criar uma conta: "
-							+ "\n1-Conta Corrente \n2-Conta Poupança");
-					i = ler.nextInt();
-					if (i == 1) {
-						contaC = cadastraContaC.CriarContaCorrente(cliente);
-						System.out.println("Numero da sua conta: " + contaC.getNumero());
-					} else if (i == 2) {
+				endereco = cadastrarEndereco.CadastraEndereco(log, numCasa, cep, bairro, cidade, estado);
+				cliente = cadastrarCliente.CadastrarDados(cpf, nome, dt, endereco);
+				System.out.print("Olá " + cliente.getNome() + " Deseja criar uma conta: "
+						+ "\n1-Conta Corrente \n2-Conta Poupança \n");
+				i = ler.nextInt();
+				if (i == 1) {
+					contaC = cadastraContaC.CriarContaCorrente(cliente);
+					System.out.println("Numero da sua conta: " + contaC.getNumero());
+
+					System.out.println("Deseja criar uma conta poupança? (S/N)");
+					repete = ler.next();
+					if (repete.equals("S")) {
 						contaP = cadastraContaP.CriarContaPoupanca(cliente);
 						System.out.println("Numero da sua conta: " + contaP.getNumero());
 					}
-					System.out.println("Deseja criar outra conta? (S/N)");
+				} else if (i == 2) {
+					contaP = cadastraContaP.CriarContaPoupanca(cliente);
+					System.out.println("Numero da sua conta: " + contaP.getNumero());
+					System.out.println("Deseja criar uma conta corrente? (S/N)");
 					repete = ler.next();
-				} while (repete.equals("S"));
+					if (repete.equals("S")) {
+						contaC = cadastraContaC.CriarContaCorrente(cliente);
+						System.out.println("Numero da sua conta: " + contaP.getNumero());
+					}
+				}
+
 				System.out.println("Conta criada com sucesso!");
 				System.out.println("Seja bem vindo " + cliente.getNome());
 				break;
@@ -111,10 +121,10 @@ public class Main {
 				if (contaC == null) {
 					System.out.println("Você não tem uma conta corrente!");
 				} else {
+					System.out.println(
+							"LOGADO COM SUCESSO! \nSeja Bem vindo novamente: " + contaC.getCliente().getNome());
 					do {
 						double v;
-						System.out.println(
-								"LOGADO COM SUCESSO! \nSeja Bem vindo novamente: " + contaC.getCliente().getNome());
 						System.out.println("-------------------" + "\nMENU CONTA CORRENTE" + "\n---------------------");
 						System.out.println("1 - Sacar");
 						System.out.println("2 - Depositar");
@@ -141,7 +151,8 @@ public class Main {
 							String numeroContaRecebe;
 							System.out.println("Qual valor deseja transferir >>> ");
 							v = ler.nextDouble();
-							System.out.println("Deseja transferir para uma conta tipo: \n1-Corrente \n2-Poupança \3-PIX");
+							System.out
+									.println("Deseja transferir para uma conta tipo: \n1-Corrente \n2-Poupança \3-PIX");
 							escolha = ler.nextInt();
 							if (escolha == 1) {
 								System.out.println("Digite o número da conta que quer transferir: ");
@@ -165,12 +176,13 @@ public class Main {
 								ContaCorrente contaRecebe = BancoDeDados.buscaContaCorrentePorPix(numeroContaRecebe);
 								System.out.println(conta.transferirCorrente(v, contaC, contaRecebe));
 								System.out
-								.println("Transferido com sucesso para " + contaRecebe.getCliente().getNome());
+										.println("Transferido com sucesso para " + contaRecebe.getCliente().getNome());
 							}
 
 							break;
 						case 4:
 							System.out.println("Valor: " + conta.consultaCorrente(contaC));
+							System.out.println(conta.StatusTipoConta(contaC));
 							break;
 						case 5:
 							int opPix;
@@ -198,7 +210,8 @@ public class Main {
 									pix = cadastrarPix.cadastraPixAleatorio();
 								}
 								System.out.println("Cadastrado com sucesso");
-								System.out.println("Seu tipo de chave é " + pix.tipoChave +"\nChave: "+ contaC.getPix());
+								System.out.println(
+										"Seu tipo de chave é " + pix.tipoChave + "\nChave: " + contaC.getPix());
 								contaC.setPix(pix);
 							} else {
 								System.out.println("Opção invalida");
@@ -218,6 +231,8 @@ public class Main {
 				if (contaP == null) {
 					System.out.println("Você não tem uma conta poupança!");
 				} else {
+					System.out.println(
+							"LOGADO COM SUCESSO! \nSeja Bem vindo novamente: " + contaC.getCliente().getNome());
 					do {
 						double v;
 						System.out.println("-------------------" + "\nMENU CONTA POUPANÇA" + "\n---------------------");
@@ -266,6 +281,7 @@ public class Main {
 							break;
 						case 4:
 							System.out.println("Valor: " + conta.consultaPoupanca(contaP));
+							System.out.println(conta.StatusTipoContaPoupanca(contaP));
 							break;
 						}
 					} while (opcaoP != 4);

@@ -58,6 +58,18 @@ public class ContaBo {
 		return contaC.getSaldo();
 	}
 
+	public String StatusTipoConta(ContaCorrente contaC) {
+
+		if (contaC.getSaldo() <= 5000) {
+			contaC.getCliente().setTipo(TipoCliente.COMUM);
+		} else if (contaC.getSaldo() <= 10000) {
+			contaC.getCliente().setTipo(TipoCliente.SUPER);
+		} else {
+			contaC.getCliente().setTipo(TipoCliente.PREMIUM);
+		}
+		return "Seu tipo de conta é " + contaC.getCliente().getTipo();
+	}
+
 	// Metodos para conta Poupanca
 	public String sacarPoupanca(double valor, ContaPoupanca contaP) {
 		if (contaP.getSaldo() > valor) {
@@ -81,7 +93,7 @@ public class ContaBo {
 			return "Conta não existe";
 		}
 	}
-	
+
 	public String transferirPoupancaCorrente(double valor, ContaPoupanca contaP, ContaCorrente contaRecebe) {
 		if (contaRecebe != null) {
 			if ((valor + 5.60) <= contaP.getSaldo()) {
@@ -105,15 +117,16 @@ public class ContaBo {
 		return contaP.getSaldo();
 	}
 
-	public String StatusTipoConta(ContaCorrente contaC) {
+	public String StatusTipoContaPoupanca(ContaPoupanca contaP) {
 
-		if (contaC.getSaldo() <= 5000) {
-			contaC.getCliente().setTipo(TipoCliente.COMUM);
-		} else if (contaC.getSaldo() <= 10000) {
-			contaC.getCliente().setTipo(TipoCliente.SUPER);
+		if (contaP.getSaldo() <= 5000) {
+			contaP.getCliente().setTipo(TipoCliente.COMUM);
+		} else if (contaP.getSaldo() <= 10000) {
+			contaP.getCliente().setTipo(TipoCliente.SUPER);
 		} else {
-			contaC.getCliente().setTipo(TipoCliente.PREMIUM);
+			contaP.getCliente().setTipo(TipoCliente.PREMIUM);
 		}
-		return "Seu tipo de conta é " + contaC.getCliente().getTipo();
+		return "Seu tipo de conta é " + contaP.getCliente().getTipo();
 	}
+
 }

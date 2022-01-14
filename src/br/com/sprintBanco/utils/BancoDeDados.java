@@ -25,7 +25,7 @@ public class BancoDeDados {
 		BancoDeDados.BANCO_DE_DADOS_CORRENTE.put(numeroConta, contaC);
 	}
 
-	public static ContaCorrente buscaContaCorrentePorPix(String chavePix) { //BUSCA UM VALOR QUE INSERIDO
+	public static ContaCorrente buscaContaCorrentePorPix(String chavePix) { //BUSCA UM VALOR QUE É INSERIDO
 		ContaCorrente contaC = new ContaCorrente();
 		contaC = null;
 		
