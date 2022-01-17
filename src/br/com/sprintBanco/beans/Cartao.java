@@ -4,7 +4,7 @@ public class Cartao {
 	
 	private String idCartao;
 	private String numeroCartao;
-	private String bandeiraCartao;
+	private TipoBandeira bandeiraCartao;
 	private String senhaCartao;
 	private boolean cartaoAtivo;
 	

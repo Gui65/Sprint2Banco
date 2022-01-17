@@ -2,12 +2,14 @@ package br.com.sprintBanco.teste;
 
 import java.util.Scanner;
 
+import br.com.sprintBanco.beans.CartaoCredito;
+import br.com.sprintBanco.beans.CartaoDebito;
 import br.com.sprintBanco.beans.Cliente;
-import br.com.sprintBanco.beans.Conta;
 import br.com.sprintBanco.beans.ContaCorrente;
 import br.com.sprintBanco.beans.ContaPoupanca;
 import br.com.sprintBanco.beans.Endereco;
 import br.com.sprintBanco.beans.Pix;
+import br.com.sprintBanco.beans.TipoBandeira;
 import br.com.sprintBanco.bo.ClienteBo;
 import br.com.sprintBanco.bo.ContaBo;
 import br.com.sprintBanco.bo.ContaCorrenteBo;
@@ -19,8 +21,6 @@ import br.com.sprintBanco.utils.BancoDeDados;
 public class Main {
 
 	public static void main(String[] args) {
-
-		String cpf, nome, dt, repete;
 
 		Scanner ler = new Scanner(System.in);
 
@@ -36,10 +36,15 @@ public class Main {
 		Pix pix = new Pix();
 		ContaCorrente contaC = new ContaCorrente();
 		ContaPoupanca contaP = new ContaPoupanca();
+		CartaoCredito cartaoC = new CartaoCredito();
+		CartaoDebito cartaoD = new CartaoDebito();
 
 		contaC = null;
 		contaP = null;
+		cartaoD = null;
+		cartaoC = null;
 
+		String cpf, nome, dt, repete;
 		int op;
 		do {
 			System.out.println("O que deseja fazer: ");
@@ -53,15 +58,16 @@ public class Main {
 				System.out.println("----------------------" + "\nCadastro de Cliente" + "\n----------------------");
 				do {
 					System.out.print("Digite seu CPF >>> ");
-					ler.nextLine();
-					cpf = ler.nextLine();
+
+					cpf = ler.next();
 					if (cadastrarCliente.validacaoCpf(cpf) == false) {
-						System.out.println("CPF INVALÍDO. DIGITE NOVAMENTE: ");
+						System.out.println("CPF INVALÍDO.");
 					} else {
 						System.out.println("CPF VALIDO.");
 					}
 				} while (cadastrarCliente.validacaoCpf(cpf) == false);
 				System.out.print("Digite seu NOME >>> ");
+				ler.nextLine();
 				nome = ler.nextLine();
 				System.out.print("Informe sua Data de Nascimento >>> ");
 				dt = ler.nextLine();
@@ -126,27 +132,30 @@ public class Main {
 					do {
 						double v;
 						System.out.println("-------------------" + "\nMENU CONTA CORRENTE" + "\n---------------------");
-						System.out.println("1 - Sacar");
-						System.out.println("2 - Depositar");
-						System.out.println("3 - Transferir");
-						System.out.println("4 - Consultar");
-						System.out.println("5 - Cadastrar Pix");
-						System.out.println("6 - Sair");
+						System.out.println("|	1 - Sacar		|");
+						System.out.println("|	2 - Depositar		|");
+						System.out.println("|	3 - Transferir		|");
+						System.out.println("|	4 - Consultar		|");
+						System.out.println("|	5 - Cadastrar Pix	|");
+						System.out.println("|	6 - Cartão		|");
+						System.out.println("|	7 - Sair	|");
+
+						System.out.println("----------------------");
 
 						opcaoC = ler.nextInt();
 						switch (opcaoC) {
-						case 1:
+						case 1: // Sacar Corrente
 							System.out.println("Qual valor deseja sacar >>> ");
 							v = ler.nextDouble();
 							System.out.println(conta.sacarCorrente(v, contaC));
 							break;
-						case 2:
+						case 2: // Depositar Corrente
 							System.out.println("Qual valor deseja depositar >>> ");
 							v = ler.nextDouble();
 							conta.depositoCorrente(v, contaC);
 							System.out.println("Deposito realizado com sucesso!");
 							break;
-						case 3:
+						case 3: // Transferir Corrente
 							int escolha;
 							String numeroContaRecebe;
 							System.out.println("Qual valor deseja transferir >>> ");
@@ -180,11 +189,11 @@ public class Main {
 							}
 
 							break;
-						case 4:
+						case 4: // Consultar Corrente
 							System.out.println("Valor: " + conta.consultaCorrente(contaC));
 							System.out.println(conta.StatusTipoConta(contaC));
 							break;
-						case 5:
+						case 5: // Cadastrar Pix
 							int opPix;
 							System.out.println(
 									"Deseja cadastrar uma chave do tipo: \n1-Email \n2-CPF \n3-TELEFONE \n4-ALEÁTORIA");
@@ -217,8 +226,56 @@ public class Main {
 								System.out.println("Opção invalida");
 								continue;
 							}
+							break;
+						case 6: // Cartao Corrente
+							int seleciona;
+							System.out.println("1 - Cartao de Débito");
+							System.out.println("2 - Cartao de Crédito");
+							seleciona = ler.nextInt();
+							if (seleciona == 1 || seleciona == 2) {
+								if (seleciona == 1) {
+									if (contaC.getCartaoDebito().isCartaoAtivo() == false) { // não tem um Cartão Ativo
+										int ativarDebito;
+										System.out.println("Você não tem um cartão de debito ativo");
+										System.out.println("Deseja criar um ? \n1-Sim \n2-Nao");
+										ativarDebito = ler.nextInt();
+
+										if (ativarDebito == 1 || ativarDebito == 2) {
+											if (ativarDebito == 1) {
+												TipoBandeira bandeira;
+												int opcaoBandeira;
+												do {
+													System.out
+															.println("Selecione a bandeira que deseja o seu cartão: ");
+													System.out.println("1 - MasterCard \n2 - Elo \n3 - Visa");
+													opcaoBandeira = ler.nextInt();
+													if (opcaoBandeira == 1) {
+														bandeira = TipoBandeira.MASTERCARD;
+													} else if (opcaoBandeira == 2) {
+														bandeira = TipoBandeira.ELO;
+													} else if (opcaoBandeira == 3) {
+														bandeira = TipoBandeira.VISA;
+													} else {
+														System.out.println("Opção invalída");
+													}
+												} while (opcaoBandeira < 1 || opcaoBandeira > 3);
+												
+											}
+										} else {
+											System.out.println("Opção invalída");
+										}
+									} else { // Tem um Cartão ativo
+
+									}
+								} else if (seleciona == 2) {
+
+								}
+							} else {
+								System.out.println("Opção invalída");
+							}
+
 						}
-					} while (opcaoC != 6);
+					} while (opcaoC != 7);
 				}
 				break;
 			case 3:

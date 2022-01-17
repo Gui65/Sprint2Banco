@@ -4,8 +4,6 @@ public class CartaoDebito extends Cartao{
 
 	private double limitePorTransacao;
 	
-	
-	
 	//GET AND SET
 	public double getLimitePorTransacao() {
 		return limitePorTransacao;
