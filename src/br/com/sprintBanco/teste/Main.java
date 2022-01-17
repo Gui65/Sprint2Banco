@@ -2,7 +2,7 @@ package br.com.sprintBanco.teste;
 
 import java.util.Scanner;
 
-import br.com.sprintBanco.beans.CartaoCredito;
+import br.com.sprintBanco.beans.Cartao;
 import br.com.sprintBanco.beans.CartaoDebito;
 import br.com.sprintBanco.beans.Cliente;
 import br.com.sprintBanco.beans.ContaCorrente;
@@ -10,6 +10,7 @@ import br.com.sprintBanco.beans.ContaPoupanca;
 import br.com.sprintBanco.beans.Endereco;
 import br.com.sprintBanco.beans.Pix;
 import br.com.sprintBanco.beans.TipoBandeira;
+import br.com.sprintBanco.bo.CartaoBo;
 import br.com.sprintBanco.bo.CartaoCreditoBo;
 import br.com.sprintBanco.bo.CartaoDebitoBo;
 import br.com.sprintBanco.bo.ClienteBo;
@@ -34,19 +35,19 @@ public class Main {
 		CartaoCreditoBo ativarCartaoC = new CartaoCreditoBo();
 		ContaBo conta = new ContaBo();
 		PixBo cadastrarPix = new PixBo();
+		CartaoBo ativarCartao = new CartaoBo();
 
 		Cliente cliente = new Cliente();
 		Endereco endereco = new Endereco();
 		Pix pix = new Pix();
 		ContaCorrente contaC = new ContaCorrente();
 		ContaPoupanca contaP = new ContaPoupanca();
-		CartaoCredito cartaoC = new CartaoCredito();
+		Cartao cartao = new Cartao();
 		CartaoDebito cartaoD = new CartaoDebito();
 
 		contaC = null;
 		contaP = null;
-		cartaoD = null;
-		cartaoC = null;
+		cartao = null;
 
 		String cpf, nome, dt, repete;
 		int op;
@@ -232,72 +233,88 @@ public class Main {
 							}
 							break;
 						case 6: // Cartao Corrente
-							int seleciona;
-							System.out.println("1 - Cartao de Débito");
-							System.out.println("2 - Cartao de Crédito");
-							seleciona = ler.nextInt();
-							if (seleciona == 1 || seleciona == 2) {
-								if (seleciona == 1) {
-									if (cartaoD == null) { // não tem um Cartão Ativo
-										int ativarDebito;
-										System.out.println("Você não tem um cartão de debito ativo");
-										System.out.println("Deseja criar um ? \n1-Sim \n2-Nao");
-										ativarDebito = ler.nextInt();
-
-										if (ativarDebito == 1 || ativarDebito == 2) { // Valida se Opcão está entre 1 ou
-																						// 2
-											if (ativarDebito == 1) {
-												TipoBandeira bandeira = null;
-												int opcaoBandeira;
-												String senha;
-												double limite;
-
-												do {
-													System.out
-															.println("Selecione a bandeira que deseja o seu cartão: ");
-													System.out.println("1 - MasterCard \n2 - Elo \n3 - Visa");
-													opcaoBandeira = ler.nextInt();
-													if (opcaoBandeira == 1) {
-														bandeira = TipoBandeira.MASTERCARD;
-													} else if (opcaoBandeira == 2) {
-														bandeira = TipoBandeira.ELO;
-													} else if (opcaoBandeira == 3) {
-														bandeira = TipoBandeira.VISA;
-													} else {
-														System.out.println("Opção invalída");
-													}
-												} while (opcaoBandeira < 1 || opcaoBandeira > 3);
-												System.out.println("Digite uma senha (APENAS NÚMEROS)");
-												senha = ler.next();
-												System.out.println("Digite um limite por cada transação: ");
-												limite = ler.nextDouble();
-
-												cartaoD = ativarCartaoD.ativaCartaoDebito(bandeira, senha, limite);
-												contaC.setCartaoDebito(cartaoD);
-											} else {
-												continue;
-											}
-										} else { // Caso não esteja entre 1 ou 2 Opcao invalida
+							if (cartao == null) { // não tem um Cartão Ativo
+								int ativar;
+								System.out.println("Você não tem um cartão ativo");
+								System.out.println("Deseja criar um ? \n1-Sim \n2-Nao");
+								ativar = ler.nextInt();
+								if (ativar == 1) {
+									TipoBandeira bandeira = null;
+									int opcaoBandeira;
+									String senha;
+									do {
+										System.out.println("Selecione a bandeira que deseja o seu cartão: ");
+										System.out.println("1 - MasterCard \n2 - Elo \n3 - Visa");
+										opcaoBandeira = ler.nextInt();
+										if (opcaoBandeira == 1) {
+											bandeira = TipoBandeira.MASTERCARD;
+										} else if (opcaoBandeira == 2) {
+											bandeira = TipoBandeira.ELO;
+										} else if (opcaoBandeira == 3) {
+											bandeira = TipoBandeira.VISA;
+										} else {
 											System.out.println("Opção invalída");
 										}
-									} else { // Tem um Cartão ativo
-										System.out.println(contaC.getCartaoDebito().getNumeroCartao());
-										System.out.println(contaC.getCartaoDebito().getSenhaCartao());
-										System.out.println(contaC.getCartaoDebito().getLimitePorTransacao());
-										System.out.println(contaC.getCartaoDebito().getBandeiraCartao());
+									} while (opcaoBandeira < 1 || opcaoBandeira > 3);
+									System.out.println("Digite uma senha (APENAS NÚMEROS)");
+									senha = ler.next();
+									cartao = ativarCartao.ativaCartao(bandeira, senha);
+									contaC.setCartao(cartao);
+									System.out.println("Deseja ativar a função \n1 - Debito \n2 - Credito");
+									int funcao = ler.nextInt();
+									if (funcao == 1) {
+										System.out.println("Digite seu limite por transação: ");
+										int limite = ler.nextInt();
+										cartaoD = ativarCartaoD.ativaCartaoDebito(limite);
+										cartao.setCartaoDebito(cartaoD);
 									}
-								} else if (seleciona == 2) {
-
+								} else { // Fim ativarCartao
+									continue;
 								}
-							} else {
-								System.out.println("Opção invalída");
-							}
+
+							} else { // Tem um Cartão ativo
+								int opcao;
+								System.out.println(
+										"------------------" + "\nMENU CARTÃO DE DÉBITO" + "\n---------------------");
+								System.out.println("1 - Ajustar Limite por Transação");
+								System.out.println("2 - Ver informações do cartão");
+								System.out.println("3 - Desativar cartão");
+								System.out.println("4 - Sair");
+								opcao = ler.nextInt();
+
+								if (opcao == 1) {
+									double limite;
+									System.out.println("Digite seu novo limite: ");
+									limite = ler.nextDouble();
+									contaC.getCartao().getCartaoDebito().setLimitePorTransacao(limite);
+									System.out.println("Limite Ajustado com sucesso!");
+								} else if (opcao == 2) {
+									System.out.println("Número do Cartão: " + contaC.getCartao().getNumeroCartao());
+									System.out.println("Senha do Cartão: " + contaC.getCartao().getSenhaCartao());
+									System.out.println("Limite por transação: "
+											+ contaC.getCartao().getCartaoDebito().getLimitePorTransacao());
+									System.out.println("Bandeira do Cartão: " + contaC.getCartao().getBandeiraCartao());
+								} else if (opcao == 3) {
+									int confirmaDesativacao;
+									System.out.println("Deseja mesmo desativar seu cartão? \n1 - Sim \n2- Não");
+									confirmaDesativacao = ler.nextInt();
+									if (confirmaDesativacao == 1) {
+										contaC.getCartao().getCartaoDebito().setCartaoAtivo(false);
+									} else {
+										continue;
+									}
+								} else if (opcao == 4) {
+									continue;
+								}
+
+							} // Fim Menu Cartao de Debito (Se ativo)
 
 						}
 					} while (opcaoC != 7);
 				}
 				break;
 			case 3:
+
 				int opcaoP;
 
 				System.out.print("Digite o número da sua conta >>>");

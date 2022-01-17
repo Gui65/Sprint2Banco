@@ -8,8 +8,7 @@ public class Conta {
 	protected Cliente cliente;
 	protected TipoCliente tipo;
 	protected Pix pix;
-	protected CartaoCredito cartaoCredito;
-	protected CartaoDebito cartaoDebito;
+	protected Cartao cartao;
 	
 	public TipoCliente getTipo() {
 		return tipo;
@@ -59,20 +58,14 @@ public class Conta {
 		this.cliente = cliente;
 	}
 
-	public CartaoCredito getCartaoCredito() {
-		return cartaoCredito;
+	public Cartao getCartao() {
+		return cartao;
 	}
 
-	public void setCartaoCredito(CartaoCredito cartaoCredito) {
-		this.cartaoCredito = cartaoCredito;
+	public void setCartao(Cartao cartao) {
+		this.cartao = cartao;
 	}
 
-	public CartaoDebito getCartaoDebito() {
-		return cartaoDebito;
-	}
-
-	public void setCartaoDebito(CartaoDebito cartaoDebito) {
-		this.cartaoDebito = cartaoDebito;
-	}
+	
 	
 }

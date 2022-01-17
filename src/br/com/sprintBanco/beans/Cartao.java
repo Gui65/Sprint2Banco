@@ -1,15 +1,18 @@
 package br.com.sprintBanco.beans;
 
 public class Cartao {
-	
+
 	private String idCartao;
 	private String numeroCartao;
 	private TipoBandeira bandeiraCartao;
 	private String senhaCartao;
-	private boolean cartaoAtivo = false;
+	private boolean cartaoAtivo;
+	private CartaoDebito cartaoDebito;
+	private CartaoCredito cartaoCredito;
 	
 	
-	//GET AND SET
+	
+	// GET AND SET
 	public String getIdCartao() {
 		return idCartao;
 	}
@@ -25,8 +28,6 @@ public class Cartao {
 	public void setNumeroCartao(String numeroCartao) {
 		this.numeroCartao = numeroCartao;
 	}
-
-	
 
 	public TipoBandeira getBandeiraCartao() {
 		return bandeiraCartao;
@@ -52,6 +53,20 @@ public class Cartao {
 		this.cartaoAtivo = cartaoAtivo;
 	}
 
-	
+	public CartaoDebito getCartaoDebito() {
+		return cartaoDebito;
+	}
+
+	public void setCartaoDebito(CartaoDebito cartaoDebito) {
+		this.cartaoDebito = cartaoDebito;
+	}
+
+	public CartaoCredito getCartaoCredito() {
+		return cartaoCredito;
+	}
+
+	public void setCartaoCredito(CartaoCredito cartaoCredito) {
+		this.cartaoCredito = cartaoCredito;
+	}
 
 }
