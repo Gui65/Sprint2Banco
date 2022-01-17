@@ -3,10 +3,11 @@ package br.com.sprintBanco.bo;
 import java.util.UUID;
 
 import br.com.sprintBanco.beans.CartaoDebito;
+import br.com.sprintBanco.beans.TipoBandeira;
 
 public class CartaoDebitoBo {
 
-	public CartaoDebito ativaCartaoDebito(String bandeira, String senha, double limite) {
+	public CartaoDebito ativaCartaoDebito(TipoBandeira bandeira, String senha, double limite) {
 
 		CartaoDebito cartaoDebito = new CartaoDebito();
 
