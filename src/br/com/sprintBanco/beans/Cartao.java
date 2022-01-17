@@ -6,7 +6,7 @@ public class Cartao {
 	private String numeroCartao;
 	private String bandeiraCartao;
 	private String senhaCartao;
-	private String cartaoAtivo;
+	private boolean cartaoAtivo;
 	
 	
 	//GET AND SET
@@ -42,12 +42,14 @@ public class Cartao {
 		this.senhaCartao = senhaCartao;
 	}
 
-	public String getCartaoAtivo() {
+	public boolean isCartaoAtivo() {
 		return cartaoAtivo;
 	}
 
-	public void setCartaoAtivo(String cartaoAtivo) {
+	public void setCartaoAtivo(boolean cartaoAtivo) {
 		this.cartaoAtivo = cartaoAtivo;
 	}
+
+	
 
 }
