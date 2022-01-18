@@ -457,6 +457,8 @@ public class Main {
 								System.out.println("3 - Informações do Cartão");
 								System.out.println("4 - Ajustar limite de transação(Debito)");
 								System.out.println("5 - Ajustar limite do cartão de crédito");
+								System.out.println("6 - Desativar função debito");
+								System.out.println("7 - Desativar função credito");
 
 								int opcao = ler.nextInt();
 								if (opcao == 1) { // Ativa função debito
@@ -478,15 +480,54 @@ public class Main {
 										cartaoC = ativarCartaoC.ativaCartaoCredito(limite);
 										contaP.getCartao().setCartaoCredito(cartaoC);
 									}
-								} else if (opcao == 3) {
+								} else if (opcao == 3) { //Informações do cartao
 									System.out.println("Numero do Cartão: " + contaP.getCartao().getNumeroCartao());
 									System.out.println("Bandeira: " + contaP.getCartao().getBandeiraCartao());
 									System.out.println("Senha: " + contaP.getCartao().getSenhaCartao());
 									System.out.println(
 											"Função crédito: " + contaP.getCartao().getCartaoCredito().isCartaoAtivo());
+									// Caso estiver ativado, mostra o limite
+									if (contaP.getCartao().getCartaoCredito().isCartaoAtivo() == true) {
+										System.out.println("Limite Cartão de crédito: "
+												+ contaP.getCartao().getCartaoCredito().getLimite());
+									}
 									System.out.println(
 											"Função debito: " + contaP.getCartao().getCartaoDebito().isCartaoAtivo());
+									// Caso estiver ativado, mostra o limite
+									if (contaP.getCartao().getCartaoDebito().isCartaoAtivo() == true) {
+										System.out.println("Limite Cartão de debito: "
+												+ contaC.getCartao().getCartaoDebito().getLimitePorTransacao());
+									}
 
+								} else if (opcao == 4) { //Altera limite debito
+									if (contaP.getCartao().getCartaoDebito().isCartaoAtivo() == true) {
+										System.out.println("Digite o novo valor: ");
+										double limite = ler.nextDouble();
+										System.out.println(ativarCartaoD.alterarLimiteDebito(cartaoD, limite));
+									} else {
+										System.out.println("Função desativada");
+									}
+								} else if (opcao == 5) { // Altera o valor de limite de credito
+									if (contaP.getCartao().getCartaoCredito().isCartaoAtivo() == true) {
+										System.out.println("Digite o novo valor: ");
+										double limite = ler.nextDouble();
+										System.out.println(ativarCartaoC.alterarLimiteCredito(cartaoC, limite));
+									} else {
+										System.out.println("Função desativada");
+									}
+
+								} else if (opcao == 6) { // Desativa Função Debito
+									if (contaP.getCartao().getCartaoDebito().isCartaoAtivo() == true) {
+										System.out.println(ativarCartaoD.desativarCartaoDebito(cartaoD));
+									} else {
+										System.out.println("Já está desativada");
+									}
+								} else if (opcao == 7) { // Desativa função crédito
+									if (contaP.getCartao().getCartaoCredito().isCartaoAtivo() == true) {
+										System.out.println(ativarCartaoC.desativarCartaoCredito(cartaoC));
+									} else {
+										System.out.println("Já está desativada");
+									}
 								}
 							} // Fim Menu Cartao(Se ativo)
 
