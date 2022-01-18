@@ -2,6 +2,7 @@ package br.com.sprintBanco.bo;
 
 import java.util.UUID;
 
+import br.com.sprintBanco.beans.Cartao;
 import br.com.sprintBanco.beans.Cliente;
 import br.com.sprintBanco.beans.ContaPoupanca;
 import br.com.sprintBanco.utils.BancoDeDados;
@@ -22,11 +23,13 @@ public class ContaPoupancaBo {
 	public ContaPoupanca CriarContaPoupanca(Cliente cliente) {
 
 		ContaPoupanca contaP = new ContaPoupanca();
-
+		Cartao cartao = new Cartao();
+		
 		contaP.setIdConta(UUID.randomUUID().toString());
 		contaP.setNumero(UUID.randomUUID().toString());
 		contaP.setSaldo(0.0);
 		contaP.setCliente(cliente);
+		contaP.setCartao(cartao);
 		
 		BancoDeDados.insereContaPoupanca(contaP.getNumero(), contaP);
 		

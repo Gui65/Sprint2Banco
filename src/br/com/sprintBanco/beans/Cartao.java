@@ -6,7 +6,7 @@ public class Cartao {
 	private String numeroCartao;
 	private TipoBandeira bandeiraCartao;
 	private String senhaCartao;
-	private boolean cartaoAtivo;
+	private boolean cartaoAtivo = false;
 	private CartaoDebito cartaoDebito;
 	private CartaoCredito cartaoCredito;
 	

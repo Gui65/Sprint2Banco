@@ -3,6 +3,7 @@ package br.com.sprintBanco.teste;
 import java.util.Scanner;
 
 import br.com.sprintBanco.beans.Cartao;
+import br.com.sprintBanco.beans.CartaoCredito;
 import br.com.sprintBanco.beans.CartaoDebito;
 import br.com.sprintBanco.beans.Cliente;
 import br.com.sprintBanco.beans.ContaCorrente;
@@ -44,10 +45,8 @@ public class Main {
 		ContaPoupanca contaP = new ContaPoupanca();
 		Cartao cartao = new Cartao();
 		CartaoDebito cartaoD = new CartaoDebito();
+		CartaoCredito cartaoC = new CartaoCredito();
 
-		contaC = null;
-		contaP = null;
-		cartao = null;
 
 		String cpf, nome, dt, repete;
 		int op;
@@ -61,6 +60,8 @@ public class Main {
 			case 1:
 				int i;
 				System.out.println("----------------------" + "\nCadastro de Cliente" + "\n----------------------");
+				contaC = null;
+				contaP = null;
 				do {
 					System.out.print("Digite seu CPF >>> ");
 
@@ -115,16 +116,17 @@ public class Main {
 					if (repete.equals("S")) {
 						contaC = cadastraContaC.CriarContaCorrente(cliente);
 						System.out.println("Numero da sua conta: " + contaP.getNumero());
+
 					}
 				}
 
 				System.out.println("Conta criada com sucesso!");
 				System.out.println("Seja bem vindo " + cliente.getNome());
+
 				break;
 
 			case 2:
 				int opcaoC;
-
 				System.out.print("Digite o número da sua conta >>> ");
 				String numeroContaC = ler.next();
 				contaC = (ContaCorrente) BancoDeDados.buscaContaCorrentePorNumero(numeroContaC);
@@ -142,8 +144,8 @@ public class Main {
 						System.out.println("|	3 - Transferir		|");
 						System.out.println("|	4 - Consultar		|");
 						System.out.println("|	5 - Cadastrar Pix	|");
-						System.out.println("|	6 - Cartão		|");
-						System.out.println("|	7 - Sair	|");
+						System.out.println("|	6 - Cartão			|");
+						System.out.println("|	7 - Sair			|");
 
 						System.out.println("----------------------");
 
@@ -223,17 +225,18 @@ public class Main {
 								} else if (opPix == 4) {
 									pix = cadastrarPix.cadastraPixAleatorio();
 								}
-								System.out.println("Cadastrado com sucesso");
-								System.out.println(
-										"Seu tipo de chave é " + pix.tipoChave + "\nChave: " + contaC.getPix());
 								contaC.setPix(pix);
+								System.out.println("Cadastrado com sucesso");
+								System.out.println("Seu tipo de chave é " + pix.tipoChave + "\nChave: "
+										+ contaC.getPix().conteudoChave);
+
 							} else {
 								System.out.println("Opção invalida");
 								continue;
 							}
 							break;
 						case 6: // Cartao Corrente
-							if (cartao == null) { // não tem um Cartão Ativo
+							if (contaC.getCartao().isCartaoAtivo() == false) { // não tem um Cartão Ativo
 								int ativar;
 								System.out.println("Você não tem um cartão ativo");
 								System.out.println("Deseja criar um ? \n1-Sim \n2-Nao");
@@ -260,54 +263,51 @@ public class Main {
 									senha = ler.next();
 									cartao = ativarCartao.ativaCartao(bandeira, senha);
 									contaC.setCartao(cartao);
-									System.out.println("Deseja ativar a função \n1 - Debito \n2 - Credito");
-									int funcao = ler.nextInt();
-									if (funcao == 1) {
-										System.out.println("Digite seu limite por transação: ");
-										int limite = ler.nextInt();
-										cartaoD = ativarCartaoD.ativaCartaoDebito(limite);
-										cartao.setCartaoDebito(cartaoD);
-									}
+
 								} else { // Fim ativarCartao
 									continue;
 								}
 
 							} else { // Tem um Cartão ativo
-								int opcao;
-								System.out.println(
-										"------------------" + "\nMENU CARTÃO DE DÉBITO" + "\n---------------------");
-								System.out.println("1 - Ajustar Limite por Transação");
-								System.out.println("2 - Ver informações do cartão");
-								System.out.println("3 - Desativar cartão");
-								System.out.println("4 - Sair");
-								opcao = ler.nextInt();
 
-								if (opcao == 1) {
-									double limite;
-									System.out.println("Digite seu novo limite: ");
-									limite = ler.nextDouble();
-									contaC.getCartao().getCartaoDebito().setLimitePorTransacao(limite);
-									System.out.println("Limite Ajustado com sucesso!");
-								} else if (opcao == 2) {
-									System.out.println("Número do Cartão: " + contaC.getCartao().getNumeroCartao());
-									System.out.println("Senha do Cartão: " + contaC.getCartao().getSenhaCartao());
-									System.out.println("Limite por transação: "
-											+ contaC.getCartao().getCartaoDebito().getLimitePorTransacao());
-									System.out.println("Bandeira do Cartão: " + contaC.getCartao().getBandeiraCartao());
-								} else if (opcao == 3) {
-									int confirmaDesativacao;
-									System.out.println("Deseja mesmo desativar seu cartão? \n1 - Sim \n2- Não");
-									confirmaDesativacao = ler.nextInt();
-									if (confirmaDesativacao == 1) {
-										contaC.getCartao().getCartaoDebito().setCartaoAtivo(false);
+								System.out.println("------------------" + "\nMENU CARTÃO" + "\n---------------------");
+								System.out.println("1 - Ativar função Débito");
+								System.out.println("2 - Ativar função Credito");
+								System.out.println("3 - Informações do Cartão");
+								System.out.println("4 - Ajustar limite de transação(Debito)");
+								System.out.println("5 - Ajustar limite do cartão de crédito");
+
+								int opcao = ler.nextInt();
+								if (opcao == 1) { // Ativa função debito
+									if (contaC.getCartao().getCartaoDebito().isCartaoAtivo() == true) {
+										System.out.println("Função Debito já esta ativada");
 									} else {
-										continue;
+										System.out.println("Digite seu limite por transação: ");
+										int limite = ler.nextInt();
+										cartaoD = ativarCartaoD.ativaCartaoDebito(limite);
+										contaC.getCartao().setCartaoDebito(cartaoD);
 									}
-								} else if (opcao == 4) {
-									continue;
-								}
 
-							} // Fim Menu Cartao de Debito (Se ativo)
+								} else if (opcao == 2) { // Ativa Função crédito
+									if (contaC.getCartao().getCartaoCredito().isCartaoAtivo() == true) {
+										System.out.println("Função Credito já esta ativada");
+									} else {
+										System.out.println("Digite seu limite do cartão de crédito ");
+										int limite = ler.nextInt();
+										cartaoC = ativarCartaoC.ativaCartaoCredito(limite);
+										contaC.getCartao().setCartaoCredito(cartaoC);
+									}
+								} else if (opcao == 3) {
+									System.out.println("Numero do Cartão: " + contaC.getCartao().getNumeroCartao());
+									System.out.println("Bandeira: " + contaC.getCartao().getBandeiraCartao());
+									System.out.println("Senha: " + contaC.getCartao().getSenhaCartao());
+									System.out.println(
+											"Função crédito: " + contaC.getCartao().getCartaoCredito().isCartaoAtivo());
+									System.out.println(
+											"Função debito: " + contaC.getCartao().getCartaoDebito().isCartaoAtivo());
+
+								}
+							} // Fim Menu Cartao(Se ativo)
 
 						}
 					} while (opcaoC != 7);
