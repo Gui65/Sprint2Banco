@@ -12,7 +12,7 @@ public class ContaCorrenteBo {
 	public double DescontarTaxa(ContaCorrente contaC) {
 
 		double saldo;
-		saldo = contaC.getSaldo() * 0.045;
+		saldo = contaC.getSaldo() * 0.0045;
 		contaC.setSaldo(contaC.getSaldo() - saldo);
 		return contaC.getSaldo();
 	}

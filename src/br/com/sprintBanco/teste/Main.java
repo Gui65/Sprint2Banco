@@ -1,11 +1,14 @@
 package br.com.sprintBanco.teste;
 
+import java.text.SimpleDateFormat;
+import java.util.List;
 import java.util.Scanner;
 
 import br.com.sprintBanco.beans.Cartao;
 import br.com.sprintBanco.beans.CartaoCredito;
 import br.com.sprintBanco.beans.CartaoDebito;
 import br.com.sprintBanco.beans.Cliente;
+import br.com.sprintBanco.beans.Compra;
 import br.com.sprintBanco.beans.ContaCorrente;
 import br.com.sprintBanco.beans.ContaPoupanca;
 import br.com.sprintBanco.beans.Endereco;
@@ -56,14 +59,14 @@ public class Main {
 			System.out.println("3 - Entrar na sua conta Poupança!");
 			op = ler.nextInt();
 			switch (op) {
-			case 1:
+			case 1: // CADASTRA UM NOVO USUÁRIO
 				int i;
 				System.out.println("----------------------" + "\nCadastro de Cliente" + "\n----------------------");
 				contaC = null;
 				contaP = null;
 				do {
 					System.out.print("Digite seu CPF >>> ");
-
+					// VALIDA O CPF
 					cpf = ler.next();
 					if (cadastrarCliente.validacaoCpf(cpf) == false) {
 						System.out.println("CPF INVALÍDO.");
@@ -71,6 +74,7 @@ public class Main {
 						System.out.println("CPF VALIDO.");
 					}
 				} while (cadastrarCliente.validacaoCpf(cpf) == false);
+
 				System.out.print("Digite seu NOME >>> ");
 				ler.nextLine();
 				nome = ler.nextLine();
@@ -124,7 +128,7 @@ public class Main {
 
 				break;
 
-			case 2:
+			case 2: // ENTRA EM UMA CONTA CORRENTE EXISTENTE
 				int opcaoC;
 				System.out.print("Digite o número da sua conta >>> ");
 				String numeroContaC = ler.next();
@@ -143,8 +147,8 @@ public class Main {
 						System.out.println("|	3 - Transferir		|");
 						System.out.println("|	4 - Consultar		|");
 						System.out.println("|	5 - Cadastrar Pix	|");
-						System.out.println("|	6 - Cartão			|");
-						System.out.println("|	7 - Sair			|");
+						System.out.println("|	6 - Cartão		|");
+						System.out.println("|	7 - Sair		|");
 
 						System.out.println("----------------------");
 
@@ -273,7 +277,7 @@ public class Main {
 								System.out.println("1 - Cartão de crédito");
 								System.out.println("2 - Cartão de Débito");
 								System.out.println("3 - Informações do Cartão");
-								
+
 								int opcao = ler.nextInt();
 								if (opcao == 1) {
 									System.out.println(
@@ -283,6 +287,7 @@ public class Main {
 									System.out.println("3 - Ajustar limite");
 									System.out.println("4 - Exibir fatura"); // Não sei como fazer ainda
 									System.out.println("5 - Desabilitar Cartão de crédito");
+									System.out.println("6 - Comprar");
 									int opcaoCredito = ler.nextInt();
 
 									if (opcaoCredito == 1) { // Ativa Função crédito
@@ -311,14 +316,45 @@ public class Main {
 											System.out.println("Função desativada");
 										}
 
+									} else if (opcaoCredito == 4) {
+										if (contaC.getCartao().getCartaoCredito().isCartaoAtivo()) {
+											SimpleDateFormat sdfComHora = new SimpleDateFormat("dd/MM/yyy HH:mm:ss");
+											List<Compra> listaCompras = contaC.getCartao().getCartaoCredito()
+													.getCompras();
+											for (Compra compras : listaCompras) {
+												String dataDaCompra = sdfComHora.format(compras.getDate());
+												double valorDaCompra = compras.getValor();
+
+												System.out.println("Compra realizada no dia " + dataDaCompra
+														+ " no Valor de R$" + valorDaCompra);
+											}
+
+											System.out.println("Valor da fatura: "
+													+ contaC.getCartao().getCartaoCredito().getValorFatura());
+										} else {
+											System.out.println("Função desativada");
+										}
+
 									} else if (opcaoCredito == 5) {
 										if (contaC.getCartao().getCartaoCredito().isCartaoAtivo() == true) {
 											System.out.println(ativarCartaoC.desativarCartaoCredito(cartaoC));
 										} else {
 											System.out.println("Já está desativada");
 										}
+									} else if (opcaoCredito == 6) {
+										if (contaC.getCartao().getCartaoCredito().isCartaoAtivo()) {
+											System.out.println("Digite o valor da compra: ");
+											double valor = ler.nextDouble();
+											boolean retorno = ativarCartaoC.compraCredito(valor, contaC);
+											if (retorno) {
+												System.out.println("Compra efetuada com sucesso!");
+											} else {
+												System.out.println("Limite atingido \nSeu limite atual é: "
+														+ contaC.getCartao().getCartaoCredito().getLimite());
+											}
+										}
 									}
-								} else if (opcao == 2) {
+								} else if (opcao == 2) { // MENU DEBITO
 									System.out.println(
 											"------------------" + "\nFUNÇÃO DEBITO" + "\n---------------------");
 									System.out.println("1 - Habilitar Cartão de Debito");
@@ -377,7 +413,7 @@ public class Main {
 					} while (opcaoC != 7);
 				}
 				break;
-			case 3:
+			case 3: // ENTRA EM UMA CONTA POUPANÇA EXISTENTE
 
 				int opcaoP;
 
@@ -481,8 +517,8 @@ public class Main {
 								System.out.println("2 - Cartão de Débito");
 								System.out.println("3 - Informações do Cartão");
 								int opcao = ler.nextInt();
-								
-								if (opcao == 1) { //MENU CRÉDITO
+
+								if (opcao == 1) { // MENU CRÉDITO
 									System.out.println(
 											"------------------" + "\nFUNÇÃO CRÉDITO" + "\n---------------------");
 									System.out.println("1 - Habilitar Cartão de Crédito");
@@ -501,7 +537,7 @@ public class Main {
 											cartaoC = ativarCartaoC.ativaCartaoCredito(limite);
 											contaP.getCartao().setCartaoCredito(cartaoC);
 										}
-									} else if (opcaoCredito == 2) { //Exibe o limite
+									} else if (opcaoCredito == 2) { // Exibe o limite
 										// Caso estiver ativado, mostra o limite
 										if (contaP.getCartao().getCartaoCredito().isCartaoAtivo() == true) {
 											System.out.println("Limite Cartão de crédito: "
@@ -509,7 +545,7 @@ public class Main {
 										} else {
 											System.out.println("Função desativada");
 										}
-									} else if (opcaoCredito == 3) { //Altera o limite
+									} else if (opcaoCredito == 3) { // Altera o limite
 										if (contaP.getCartao().getCartaoCredito().isCartaoAtivo() == true) {
 											System.out.println("Digite o novo valor: ");
 											double limite = ler.nextDouble();
@@ -518,14 +554,14 @@ public class Main {
 											System.out.println("Função desativada");
 										}
 
-									} else if (opcaoCredito == 5) { //Desativa função
+									} else if (opcaoCredito == 5) { // Desativa função
 										if (contaP.getCartao().getCartaoCredito().isCartaoAtivo() == true) {
 											System.out.println(ativarCartaoC.desativarCartaoCredito(cartaoC));
 										} else {
 											System.out.println("Já está desativada");
 										}
 									}
-								} else if (opcao == 2) { //MENU DEBITO
+								} else if (opcao == 2) { // MENU DEBITO
 									System.out.println(
 											"------------------" + "\nFUNÇÃO DEBITO" + "\n---------------------");
 									System.out.println("1 - Habilitar Cartão de Debito");
