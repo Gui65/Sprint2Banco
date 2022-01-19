@@ -9,29 +9,29 @@ import br.com.sprintBanco.utils.BancoDeDados;
 
 public class ContaCorrenteBo {
 
-	public double DescontarTaxa() {
-		ContaCorrente contaCorrente = new ContaCorrente();
+	public double DescontarTaxa(ContaCorrente contaC) {
+
 		double saldo;
-		saldo = contaCorrente.getSaldo() * 0.045;
-		contaCorrente.setSaldo(contaCorrente.getSaldo() - saldo);		
-		return contaCorrente.getSaldo();
+		saldo = contaC.getSaldo() * 0.045;
+		contaC.setSaldo(contaC.getSaldo() - saldo);
+		return contaC.getSaldo();
 	}
-	
+
 	public ContaCorrente CriarContaCorrente(Cliente cliente) {
-		
+
 		ContaCorrente contaC = new ContaCorrente();
 		Cartao cartao = new Cartao();
-		
+
 		contaC.setIdConta(UUID.randomUUID().toString());
 		contaC.setNumero(UUID.randomUUID().toString());
-		contaC.setSaldo(0.0); 
+		contaC.setSaldo(0.0);
 		contaC.setCliente(cliente);
 		contaC.setCartao(cartao);
-		
+
 		BancoDeDados.insereContaCorrente(contaC.getNumero(), contaC);
-		
+
 		return contaC;
-		
+
 	}
 
 }

@@ -9,14 +9,12 @@ import br.com.sprintBanco.utils.BancoDeDados;
 
 public class ContaPoupancaBo {
 
-	public double AcrescentarRendimento() {
-
-		ContaPoupanca contaPoupanca = new ContaPoupanca();
+	public double AcrescentarRendimento(ContaPoupanca contaP) {
 
 		double saldo;
-		saldo = contaPoupanca.getSaldo() * 0.03;
-		contaPoupanca.setSaldo(contaPoupanca.getSaldo() + saldo);
-		return contaPoupanca.getSaldo();
+		saldo = contaP.getSaldo() * 0.03;
+		contaP.setSaldo(contaP.getSaldo() + saldo);
+		return contaP.getSaldo();
 
 	}
 
@@ -24,15 +22,15 @@ public class ContaPoupancaBo {
 
 		ContaPoupanca contaP = new ContaPoupanca();
 		Cartao cartao = new Cartao();
-		
+
 		contaP.setIdConta(UUID.randomUUID().toString());
 		contaP.setNumero(UUID.randomUUID().toString());
 		contaP.setSaldo(0.0);
 		contaP.setCliente(cliente);
 		contaP.setCartao(cartao);
-		
+
 		BancoDeDados.insereContaPoupanca(contaP.getNumero(), contaP);
-		
+
 		return contaP;
 
 	}
