@@ -378,6 +378,7 @@ public class Main {
 									System.out.println("3 - Ajustar limite");
 									System.out.println("4 - Exibir extrato"); // Não sei como fazer ainda
 									System.out.println("5 - Desabilitar Cartão de debito");
+									System.out.println("6 - Comprar");
 									int opcaoDebito = ler.nextInt();
 
 									if (opcaoDebito == 1) { // Ativa função debito
@@ -390,14 +391,14 @@ public class Main {
 											contaC.getCartao().setCartaoDebito(cartaoD);
 										}
 
-									} else if (opcaoDebito == 2) {
+									} else if (opcaoDebito == 2) { // Exibir limite
 										if (contaC.getCartao().getCartaoDebito().isCartaoAtivo() == true) {
 											System.out.println("Limite por transação: "
 													+ contaC.getCartao().getCartaoDebito().getLimitePorTransacao());
 										} else {
 											System.out.println("Função desativada");
 										}
-									} else if (opcaoDebito == 3) {
+									} else if (opcaoDebito == 3) { // Ajustar limite
 										if (contaC.getCartao().getCartaoDebito().isCartaoAtivo() == true) {
 											System.out.println("Digite o novo valor: ");
 											double limite = ler.nextDouble();
@@ -405,14 +406,47 @@ public class Main {
 										} else {
 											System.out.println("Função desativada");
 										}
-									} else if (opcaoDebito == 5) {
+									} else if (opcaoDebito == 4) { // EXIBE EXTRATO
+										if (contaC.getCartao().getCartaoDebito().isCartaoAtivo()) {
+											SimpleDateFormat sdfComHora = new SimpleDateFormat("dd/MM/yyy HH:mm:ss");
+											List<Compra> listaCompras = contaC.getCartao().getCartaoDebito()
+													.getCompras();
+											for (Compra compras : listaCompras) {
+												String dataDaCompra = sdfComHora.format(compras.getDate());
+												double valorDaCompra = compras.getValor();
+
+												System.out.println("Compra realizada no dia " + dataDaCompra
+														+ " no Valor de R$" + valorDaCompra);
+											}
+										} else {
+											System.out.println("Função desativada");
+										}
+
+									} else if (opcaoDebito == 5) { // Desabilitar Cartão de debito
+
 										if (contaC.getCartao().getCartaoDebito().isCartaoAtivo() == true) {
 											System.out.println(ativarCartaoD.desativarCartaoDebito(cartaoD));
 										} else {
 											System.out.println("Já está desativada");
 										}
+									} else if (opcaoDebito == 6) { // Comprar
+										String senha;
+										do {
+											System.out.println("Digite sua senha: ");
+											senha = ler.next();
+											if (contaC.getCartao().getSenhaCartao().equals(senha)) {
+												if (contaC.getCartao().getCartaoDebito().isCartaoAtivo() == true) {
+													System.out.println("Digite o valor da sua compra: ");
+													double valor = ler.nextDouble();
+													System.out.println(ativarCartaoD.compraDebito(valor, contaC));
+												} else {
+													System.out.println("Função desativada");
+												}
+											} else {
+												System.out.println("Senha incorreta");
+											}
+										} while (!contaC.getCartao().getSenhaCartao().equals(senha));
 									}
-
 								} else if (opcao == 3) { // Ver informações do Cartão
 									System.out.println("Numero do Cartão: " + contaC.getCartao().getNumeroCartao());
 									System.out.println("Bandeira: " + contaC.getCartao().getBandeiraCartao());
@@ -630,6 +664,7 @@ public class Main {
 									System.out.println("3 - Ajustar limite");
 									System.out.println("4 - Exibir extrato"); // Não sei como fazer ainda
 									System.out.println("5 - Desabilitar Cartão de debito");
+									System.out.println("6 - Compras");
 									int opcaoDebito = ler.nextInt();
 
 									if (opcaoDebito == 1) { // Ativa função debito
@@ -657,12 +692,47 @@ public class Main {
 										} else {
 											System.out.println("Função desativada");
 										}
+									} else if (opcaoDebito == 4) { // EXIBE EXTRATO
+										if (contaP.getCartao().getCartaoDebito().isCartaoAtivo()) {
+											SimpleDateFormat sdfComHora = new SimpleDateFormat("dd/MM/yyy HH:mm:ss");
+											List<Compra> listaCompras = contaP.getCartao().getCartaoDebito()
+													.getCompras();
+											for (Compra compras : listaCompras) {
+												String dataDaCompra = sdfComHora.format(compras.getDate());
+												double valorDaCompra = compras.getValor();
+
+												System.out.println("Compra realizada no dia " + dataDaCompra
+														+ " no Valor de R$" + valorDaCompra);
+											}
+										} else {
+											System.out.println("Função desativada");
+										}
+
 									} else if (opcaoDebito == 5) {
 										if (contaP.getCartao().getCartaoDebito().isCartaoAtivo() == true) {
 											System.out.println(ativarCartaoD.desativarCartaoDebito(cartaoD));
 										} else {
 											System.out.println("Já está desativada");
 										}
+									} else if (opcaoDebito == 6) {
+										String senha;
+										do {
+											System.out.println("Digite sua senha");
+											senha = ler.next();
+											if (!contaP.getCartao().getSenhaCartao().equals(senha)) {
+												if (contaP.getCartao().getCartaoDebito().isCartaoAtivo()) {
+													System.out.println("Digite o valor da sua compra: ");
+													double valor = ler.nextDouble();
+													System.out
+															.println(ativarCartaoD.compraDebitoPoupanca(valor, contaP));
+												} else {
+													System.out.println("Função desativada");
+												}
+
+											} else {
+												System.out.println("Senha incorreta!");
+											}
+										} while (!contaP.getCartao().getSenhaCartao().equals(senha));
 									}
 
 								} else if (opcao == 3) { // Ver informações do Cartão

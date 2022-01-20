@@ -36,38 +36,25 @@ public class CartaoCreditoBo {
 
 	public boolean compraCredito(double valor, ContaCorrente contaC) {
 		double limite = contaC.getCartao().getCartaoCredito().getLimite();
+		double fatura = contaC.getCartao().getCartaoCredito().getValorFatura();
 		if (limite >= valor) {
-			double fatura = contaC.getCartao().getCartaoCredito().getValorFatura();
 			limite -= valor;
 			contaC.getCartao().getCartaoCredito().setLimite(limite);
 			fatura += valor;
 			contaC.getCartao().getCartaoCredito().setValorFatura(fatura);
 			adicionaCompra(valor, contaC);
 			return true;
-		}else {
+		} else {
 			return false;
 		}
 
-	}
-	
-	public String faturaCartao(ContaCorrente contaC) {
-		SimpleDateFormat sdfComHora = new SimpleDateFormat("dd/MM/yyy HH:mm:ss");
-		List<Compra> listaCompras = contaC.getCartao().getCartaoCredito().getCompras();
-		for(Compra compras : listaCompras) {
-			String dataDaCompra = sdfComHora.format(compras.getDate());
-			double valorDaCompra = compras.getValor();
-			
-			return "Compra realizada no dia" + dataDaCompra + " no Valor de R$" + valorDaCompra;
-		}
-		
-		return "Valor da fatura: " + contaC.getCartao().getCartaoCredito().getValorFatura();
 	}
 
 	public void adicionaCompra(double valor, ContaCorrente contaC) {
 		Compra compra = new Compra(valor, new Date());
 		contaC.getCartao().getCartaoCredito().getCompras().add(compra);
 	}
-	
+
 	public boolean compraCreditoPoupanca(double valor, ContaPoupanca contaP) {
 		double limite = contaP.getCartao().getCartaoCredito().getLimite();
 		if (limite >= valor) {
@@ -78,23 +65,10 @@ public class CartaoCreditoBo {
 			contaP.getCartao().getCartaoCredito().setValorFatura(fatura);
 			adicionaCompraPoupanca(valor, contaP);
 			return true;
-		}else {
+		} else {
 			return false;
 		}
 
-	}
-	
-	public String faturaCartaoPoupanca(ContaPoupanca contaP) {
-		SimpleDateFormat sdfComHora = new SimpleDateFormat("dd/MM/yyy HH:mm:ss");
-		List<Compra> listaCompras = contaP.getCartao().getCartaoCredito().getCompras();
-		for(Compra compras : listaCompras) {
-			String dataDaCompra = sdfComHora.format(compras.getDate());
-			double valorDaCompra = compras.getValor();
-			
-			return "Compra realizada no dia" + dataDaCompra + " no Valor de R$" + valorDaCompra;
-		}
-		
-		return "Valor da fatura: " + contaP.getCartao().getCartaoCredito().getValorFatura();
 	}
 
 	public void adicionaCompraPoupanca(double valor, ContaPoupanca contaP) {
