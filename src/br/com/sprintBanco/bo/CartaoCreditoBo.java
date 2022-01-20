@@ -7,6 +7,7 @@ import java.util.List;
 import br.com.sprintBanco.beans.CartaoCredito;
 import br.com.sprintBanco.beans.Compra;
 import br.com.sprintBanco.beans.ContaCorrente;
+import br.com.sprintBanco.beans.ContaPoupanca;
 
 public class CartaoCreditoBo {
 
@@ -65,5 +66,39 @@ public class CartaoCreditoBo {
 	public void adicionaCompra(double valor, ContaCorrente contaC) {
 		Compra compra = new Compra(valor, new Date());
 		contaC.getCartao().getCartaoCredito().getCompras().add(compra);
+	}
+	
+	public boolean compraCreditoPoupanca(double valor, ContaPoupanca contaP) {
+		double limite = contaP.getCartao().getCartaoCredito().getLimite();
+		if (limite >= valor) {
+			double fatura = contaP.getCartao().getCartaoCredito().getValorFatura();
+			limite -= valor;
+			contaP.getCartao().getCartaoCredito().setLimite(limite);
+			fatura += valor;
+			contaP.getCartao().getCartaoCredito().setValorFatura(fatura);
+			adicionaCompraPoupanca(valor, contaP);
+			return true;
+		}else {
+			return false;
+		}
+
+	}
+	
+	public String faturaCartaoPoupanca(ContaPoupanca contaP) {
+		SimpleDateFormat sdfComHora = new SimpleDateFormat("dd/MM/yyy HH:mm:ss");
+		List<Compra> listaCompras = contaP.getCartao().getCartaoCredito().getCompras();
+		for(Compra compras : listaCompras) {
+			String dataDaCompra = sdfComHora.format(compras.getDate());
+			double valorDaCompra = compras.getValor();
+			
+			return "Compra realizada no dia" + dataDaCompra + " no Valor de R$" + valorDaCompra;
+		}
+		
+		return "Valor da fatura: " + contaP.getCartao().getCartaoCredito().getValorFatura();
+	}
+
+	public void adicionaCompraPoupanca(double valor, ContaPoupanca contaP) {
+		Compra compra = new Compra(valor, new Date());
+		contaP.getCartao().getCartaoCredito().getCompras().add(compra);
 	}
 }

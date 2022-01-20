@@ -98,6 +98,7 @@ public class Main {
 
 				endereco = cadastrarEndereco.CadastraEndereco(log, numCasa, cep, bairro, cidade, estado);
 				cliente = cadastrarCliente.CadastrarDados(cpf, nome, dt, endereco);
+				System.out.println("=================================");
 				System.out.print("Olá " + cliente.getNome() + " Deseja criar uma conta: "
 						+ "\n1-Conta Corrente \n2-Conta Poupança \n");
 				i = ler.nextInt();
@@ -141,7 +142,8 @@ public class Main {
 							"LOGADO COM SUCESSO! \nSeja Bem vindo novamente: " + contaC.getCliente().getNome());
 					do {
 						double v;
-						System.out.println("-------------------" + "\nMENU CONTA CORRENTE" + "\n---------------------");
+						System.out.println("=================================" + "\n	MENU CONTA CORRENTE"
+								+ "\n=================================");
 						System.out.println("|	1 - Sacar		|");
 						System.out.println("|	2 - Depositar		|");
 						System.out.println("|	3 - Transferir		|");
@@ -150,7 +152,7 @@ public class Main {
 						System.out.println("|	6 - Cartão		|");
 						System.out.println("|	7 - Sair		|");
 
-						System.out.println("----------------------");
+						System.out.println("=================================");
 
 						opcaoC = ler.nextInt();
 						switch (opcaoC) {
@@ -285,7 +287,7 @@ public class Main {
 									System.out.println("1 - Habilitar Cartão de Crédito");
 									System.out.println("2 - Exibir limite");
 									System.out.println("3 - Ajustar limite");
-									System.out.println("4 - Exibir fatura"); // Não sei como fazer ainda
+									System.out.println("4 - Exibir fatura");
 									System.out.println("5 - Desabilitar Cartão de crédito");
 									System.out.println("6 - Comprar");
 									int opcaoCredito = ler.nextInt();
@@ -299,7 +301,7 @@ public class Main {
 											cartaoC = ativarCartaoC.ativaCartaoCredito(limite);
 											contaC.getCartao().setCartaoCredito(cartaoC);
 										}
-									} else if (opcaoCredito == 2) {
+									} else if (opcaoCredito == 2) { // EXIBE LIMITE
 										// Caso estiver ativado, mostra o limite
 										if (contaC.getCartao().getCartaoCredito().isCartaoAtivo() == true) {
 											System.out.println("Limite Cartão de crédito: "
@@ -307,7 +309,7 @@ public class Main {
 										} else {
 											System.out.println("Função desativada");
 										}
-									} else if (opcaoCredito == 3) {
+									} else if (opcaoCredito == 3) { // ALTERA LIMITE
 										if (contaC.getCartao().getCartaoCredito().isCartaoAtivo() == true) {
 											System.out.println("Digite o novo valor: ");
 											double limite = ler.nextDouble();
@@ -316,7 +318,7 @@ public class Main {
 											System.out.println("Função desativada");
 										}
 
-									} else if (opcaoCredito == 4) {
+									} else if (opcaoCredito == 4) { // EXIBE FATURA
 										if (contaC.getCartao().getCartaoCredito().isCartaoAtivo()) {
 											SimpleDateFormat sdfComHora = new SimpleDateFormat("dd/MM/yyy HH:mm:ss");
 											List<Compra> listaCompras = contaC.getCartao().getCartaoCredito()
@@ -335,24 +337,38 @@ public class Main {
 											System.out.println("Função desativada");
 										}
 
-									} else if (opcaoCredito == 5) {
+									} else if (opcaoCredito == 5) { // DESATIVA CARTÃO
 										if (contaC.getCartao().getCartaoCredito().isCartaoAtivo() == true) {
 											System.out.println(ativarCartaoC.desativarCartaoCredito(cartaoC));
 										} else {
 											System.out.println("Já está desativada");
 										}
-									} else if (opcaoCredito == 6) {
-										if (contaC.getCartao().getCartaoCredito().isCartaoAtivo()) {
-											System.out.println("Digite o valor da compra: ");
-											double valor = ler.nextDouble();
-											boolean retorno = ativarCartaoC.compraCredito(valor, contaC);
-											if (retorno) {
-												System.out.println("Compra efetuada com sucesso!");
+									} else if (opcaoCredito == 6) { // COMPRAS
+										String senha;
+										do { // PEDE A SENHA UMA VEZ
+											System.out.println("Digite sua senha: ");
+											senha = ler.next();
+
+											if (contaC.getCartao().getSenhaCartao().equals(senha)) { // VALIDA A SENHA
+												if (contaC.getCartao().getCartaoCredito().isCartaoAtivo()) { // VALIDA O
+																												// CARTÃO
+													System.out.println("Digite o valor da compra: ");
+													double valor = ler.nextDouble();
+													boolean retorno = ativarCartaoC.compraCredito(valor, contaC);
+													if (retorno) {
+														System.out.println("Compra efetuada com sucesso!");
+													} else {
+														System.out.println("Limite atingido \nSeu limite atual é: "
+																+ contaC.getCartao().getCartaoCredito().getLimite());
+													}
+												} else {
+													System.out.println("Função crédito desativada");
+												}
 											} else {
-												System.out.println("Limite atingido \nSeu limite atual é: "
-														+ contaC.getCartao().getCartaoCredito().getLimite());
+												System.out.println("Senha incorreta");
 											}
-										}
+											// SE A SENHA ESTIVER INCORRETA PEDE NOVAMENTE
+										} while (!contaC.getCartao().getSenhaCartao().equals(senha));
 									}
 								} else if (opcao == 2) { // MENU DEBITO
 									System.out.println(
@@ -554,12 +570,57 @@ public class Main {
 											System.out.println("Função desativada");
 										}
 
+									} else if (opcaoCredito == 4) { // EXIBE FATURA
+										if (contaP.getCartao().getCartaoCredito().isCartaoAtivo()) {
+											SimpleDateFormat sdfComHora = new SimpleDateFormat("dd/MM/yyy HH:mm:ss");
+											List<Compra> listaCompras = contaP.getCartao().getCartaoCredito()
+													.getCompras();
+											for (Compra compras : listaCompras) {
+												String dataDaCompra = sdfComHora.format(compras.getDate());
+												double valorDaCompra = compras.getValor();
+
+												System.out.println("Compra realizada no dia " + dataDaCompra
+														+ " no Valor de R$" + valorDaCompra);
+											}
+
+											System.out.println("Valor da fatura: "
+													+ contaP.getCartao().getCartaoCredito().getValorFatura());
+										} else {
+											System.out.println("Função desativada");
+										}
 									} else if (opcaoCredito == 5) { // Desativa função
 										if (contaP.getCartao().getCartaoCredito().isCartaoAtivo() == true) {
 											System.out.println(ativarCartaoC.desativarCartaoCredito(cartaoC));
 										} else {
 											System.out.println("Já está desativada");
 										}
+									} else if (opcaoCredito == 6) { // COMPRAS
+										String senha;
+										do { // PEDE A SENHA UMA VEZ
+											System.out.println("Digite sua senha: ");
+											senha = ler.next();
+
+											if (contaP.getCartao().getSenhaCartao().equals(senha)) { // VALIDA A SENHA
+												if (contaP.getCartao().getCartaoCredito().isCartaoAtivo()) { // VALIDA O
+																												// CARTÃO
+													System.out.println("Digite o valor da compra: ");
+													double valor = ler.nextDouble();
+													boolean retorno = ativarCartaoC.compraCreditoPoupanca(valor,
+															contaP);
+													if (retorno) { // VALIDA SE TEM LIMITE
+														System.out.println("Compra efetuada com sucesso!");
+													} else {
+														System.out.println("Limite atingido \nSeu limite atual é: "
+																+ contaP.getCartao().getCartaoCredito().getLimite());
+													}
+												} else {
+													System.out.println("Função crédito desativada");
+												}
+											} else {
+												System.out.println("Senha incorreta");
+											}
+											// SE A SENHA ESTIVER INCORRETA PEDE NOVAMENTE
+										} while (!contaP.getCartao().getSenhaCartao().equals(senha));
 									}
 								} else if (opcao == 2) { // MENU DEBITO
 									System.out.println(
