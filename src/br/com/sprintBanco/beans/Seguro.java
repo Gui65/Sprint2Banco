@@ -1,13 +1,15 @@
 package br.com.sprintBanco.beans;
 
+
+
 public class Seguro {
 
 	private String id;
 	private String nome;
 	private String regras;
 	private double valorAnual;
-	
-	
+	private TipoSeguro tipoSeguro;
+
 	public double getValorAnual() {
 		return valorAnual;
 	}
@@ -38,6 +40,14 @@ public class Seguro {
 
 	public void setRegras(String regras) {
 		this.regras = regras;
+	}
+
+	public TipoSeguro getTipoSeguro() {
+		return tipoSeguro;
+	}
+
+	public void setTipoSeguro(TipoSeguro tipoSeguro) {
+		this.tipoSeguro = tipoSeguro;
 	}
 
 }

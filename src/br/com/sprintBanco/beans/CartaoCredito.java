@@ -11,6 +11,8 @@ public class CartaoCredito extends Cartao {
 	private Date dataVencimento;
 	private List<Compra> compras;
 	private double limiteInicial;
+	private Apolice apolice;
+	
 	
 	public CartaoCredito() {
 
@@ -61,5 +63,15 @@ public class CartaoCredito extends Cartao {
 	public void setDataVencimento(Date dataVencimento) {
 		this.dataVencimento = dataVencimento;
 	}
+
+	public Apolice getApolice() {
+		return apolice;
+	}
+
+	public void setApolice(Apolice apolice) {
+		this.apolice = apolice;
+	}
+	
+	
 
 }

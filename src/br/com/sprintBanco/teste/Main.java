@@ -1,6 +1,7 @@
 package br.com.sprintBanco.teste;
 
 import java.text.SimpleDateFormat;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Scanner;
 
@@ -13,7 +14,9 @@ import br.com.sprintBanco.beans.ContaCorrente;
 import br.com.sprintBanco.beans.ContaPoupanca;
 import br.com.sprintBanco.beans.Endereco;
 import br.com.sprintBanco.beans.Pix;
+import br.com.sprintBanco.beans.Seguro;
 import br.com.sprintBanco.beans.TipoBandeira;
+import br.com.sprintBanco.beans.TipoSeguro;
 import br.com.sprintBanco.bo.CartaoBo;
 import br.com.sprintBanco.bo.CartaoCreditoBo;
 import br.com.sprintBanco.bo.CartaoDebitoBo;
@@ -23,6 +26,7 @@ import br.com.sprintBanco.bo.ContaCorrenteBo;
 import br.com.sprintBanco.bo.ContaPoupancaBo;
 import br.com.sprintBanco.bo.EnderecoBo;
 import br.com.sprintBanco.bo.PixBo;
+import br.com.sprintBanco.bo.SeguroBo;
 import br.com.sprintBanco.utils.BancoDeDados;
 
 public class Main {
@@ -40,7 +44,8 @@ public class Main {
 		ContaBo conta = new ContaBo();
 		PixBo cadastrarPix = new PixBo();
 		CartaoBo ativarCartao = new CartaoBo();
-
+		SeguroBo contratarSeguro = new SeguroBo();
+		
 		Cliente cliente = new Cliente();
 		Endereco endereco = new Endereco();
 		Pix pix = new Pix();
@@ -49,7 +54,7 @@ public class Main {
 		Cartao cartao = new Cartao();
 		CartaoDebito cartaoD = new CartaoDebito();
 		CartaoCredito cartaoC = new CartaoCredito();
-
+		
 		String cpf, nome, dt, repete;
 		int op;
 		do {
@@ -291,6 +296,7 @@ public class Main {
 									System.out.println("5 - Desabilitar Cartão de crédito");
 									System.out.println("6 - Comprar");
 									System.out.println("7 - Pagar fatura");
+									System.out.println("8 - Contratar Seguro");
 									int opcaoCredito = ler.nextInt();
 
 									if (opcaoCredito == 1) { // Ativa Função crédito
@@ -376,6 +382,27 @@ public class Main {
 												System.out.println("Pago com sucesso!");
 											} else {
 												System.out.println("Saldo insuficiente!");
+											}
+										} else {
+											System.out.println("Cartão desativado");
+										}
+									} else if (opcao == 8) { //Contratar Seguro
+										if (contaC.getCartao().getCartaoCredito().isCartaoAtivo()) {
+											System.out.println("Qual seguro deseja contratar: ");
+											System.out.println("1 - Seguro Morte");
+											System.out.println("2 - Seguro Invalidez");
+											System.out.println("3 - Seguro Desemprego");
+											int opcaoSeguro = ler.nextInt();
+											HashMap<TipoSeguro, Seguro> seguros = new HashMap();
+											seguros = contratarSeguro.popularSeguros();
+											if (opcaoSeguro == 1) {
+												
+											} else if (opcaoSeguro == 2) {
+
+											} else if (opcaoSeguro == 3) {
+												
+											} else {
+												System.out.println("Opção invalida");
 											}
 										} else {
 											System.out.println("Cartão desativado");
