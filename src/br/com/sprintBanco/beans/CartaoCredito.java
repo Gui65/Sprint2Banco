@@ -10,7 +10,8 @@ public class CartaoCredito extends Cartao {
 	private double valorFatura;
 	private Date dataVencimento;
 	private List<Compra> compras;
-
+	private double limiteInicial;
+	
 	public CartaoCredito() {
 
 		this.setCartaoAtivo(false);
@@ -27,6 +28,14 @@ public class CartaoCredito extends Cartao {
 
 	public void setLimite(double limite) {
 		this.limite = limite;
+	}
+
+	public double getLimiteInicial() {
+		return limiteInicial;
+	}
+
+	public void setLimiteInicial(double limiteInicial) {
+		this.limiteInicial = limiteInicial;
 	}
 
 	public double getValorFatura() {

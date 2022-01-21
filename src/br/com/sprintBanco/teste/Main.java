@@ -290,6 +290,7 @@ public class Main {
 									System.out.println("4 - Exibir fatura");
 									System.out.println("5 - Desabilitar Cartão de crédito");
 									System.out.println("6 - Comprar");
+									System.out.println("7 - Pagar fatura");
 									int opcaoCredito = ler.nextInt();
 
 									if (opcaoCredito == 1) { // Ativa Função crédito
@@ -369,6 +370,16 @@ public class Main {
 											}
 											// SE A SENHA ESTIVER INCORRETA PEDE NOVAMENTE
 										} while (!contaC.getCartao().getSenhaCartao().equals(senha));
+									} else if (opcaoCredito == 7) { // PAGAR FATURA
+										if (contaC.getCartao().getCartaoCredito().isCartaoAtivo()) {
+											if (ativarCartaoC.pagarFatura(contaC)) {
+												System.out.println("Pago com sucesso!");
+											} else {
+												System.out.println("Saldo insuficiente!");
+											}
+										} else {
+											System.out.println("Cartão desativado");
+										}
 									}
 								} else if (opcao == 2) { // MENU DEBITO
 									System.out.println(
@@ -376,7 +387,7 @@ public class Main {
 									System.out.println("1 - Habilitar Cartão de Debito");
 									System.out.println("2 - Exibir limite");
 									System.out.println("3 - Ajustar limite");
-									System.out.println("4 - Exibir extrato"); // Não sei como fazer ainda
+									System.out.println("4 - Exibir extrato");
 									System.out.println("5 - Desabilitar Cartão de debito");
 									System.out.println("6 - Comprar");
 									int opcaoDebito = ler.nextInt();
@@ -576,6 +587,8 @@ public class Main {
 									System.out.println("3 - Ajustar limite");
 									System.out.println("4 - Exibir fatura"); // Não sei como fazer ainda
 									System.out.println("5 - Desabilitar Cartão de crédito");
+									System.out.println("6 - Comprar");
+									System.out.println("7 - Pagar Fatura");
 									int opcaoCredito = ler.nextInt();
 
 									if (opcaoCredito == 1) { // Ativa Função crédito
@@ -655,6 +668,16 @@ public class Main {
 											}
 											// SE A SENHA ESTIVER INCORRETA PEDE NOVAMENTE
 										} while (!contaP.getCartao().getSenhaCartao().equals(senha));
+									} else if (opcaoCredito == 7) { // PAGAR FATURA
+										if (contaP.getCartao().getCartaoCredito().isCartaoAtivo()) {
+											if (ativarCartaoC.pagarFaturaPoupanca(contaP)) {
+												System.out.println("Pago com sucesso!");
+											} else {
+												System.out.println("Saldo insuficiente!");
+											}
+										} else {
+											System.out.println("Cartão desativado");
+										}
 									}
 								} else if (opcao == 2) { // MENU DEBITO
 									System.out.println(

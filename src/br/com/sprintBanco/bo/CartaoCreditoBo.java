@@ -15,6 +15,7 @@ public class CartaoCreditoBo {
 		CartaoCredito cartaoC = new CartaoCredito();
 
 		cartaoC.setLimite(limite);
+		cartaoC.setLimiteInicial(limite);
 		cartaoC.setCartaoAtivo(true);
 		cartaoC.setValorFatura(0);
 		return cartaoC;
@@ -30,8 +31,20 @@ public class CartaoCreditoBo {
 	public String alterarLimiteCredito(CartaoCredito cartaoC, double limite) {
 
 		cartaoC.setLimite(limite);
-
+		cartaoC.setLimiteInicial(limite);
 		return "Valor alterado com sucesso";
+	}
+
+	public boolean pagarFatura(ContaCorrente contaC) {
+		if (contaC.getCartao().getCartaoCredito().getValorFatura() <= contaC.getSaldo()) {
+			contaC.setSaldo(contaC.getSaldo() - contaC.getCartao().getCartaoCredito().getValorFatura());
+			contaC.getCartao().getCartaoCredito().setLimite(contaC.getCartao().getCartaoCredito().getLimiteInicial());
+			contaC.getCartao().getCartaoCredito().setValorFatura(0);
+			contaC.getCartao().getCartaoCredito().getCompras().clear();
+			return true;
+		} else {
+			return false;
+		}
 	}
 
 	public boolean compraCredito(double valor, ContaCorrente contaC) {
@@ -54,7 +67,19 @@ public class CartaoCreditoBo {
 		Compra compra = new Compra(valor, new Date());
 		contaC.getCartao().getCartaoCredito().getCompras().add(compra);
 	}
-
+	
+	public boolean pagarFaturaPoupanca(ContaPoupanca contaP) {
+		if (contaP.getCartao().getCartaoCredito().getValorFatura() <= contaP.getSaldo()) {
+			contaP.setSaldo(contaP.getSaldo() - contaP.getCartao().getCartaoCredito().getValorFatura());
+			contaP.getCartao().getCartaoCredito().setLimite(contaP.getCartao().getCartaoCredito().getLimiteInicial());
+			contaP.getCartao().getCartaoCredito().setValorFatura(0);
+			contaP.getCartao().getCartaoCredito().getCompras().clear();
+			return true;
+		} else {
+			return false;
+		}
+	}
+	
 	public boolean compraCreditoPoupanca(double valor, ContaPoupanca contaP) {
 		double limite = contaP.getCartao().getCartaoCredito().getLimite();
 		if (limite >= valor) {
