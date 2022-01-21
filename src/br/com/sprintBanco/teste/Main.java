@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Scanner;
 
+import br.com.sprintBanco.beans.Apolice;
 import br.com.sprintBanco.beans.Cartao;
 import br.com.sprintBanco.beans.CartaoCredito;
 import br.com.sprintBanco.beans.CartaoDebito;
@@ -17,6 +18,7 @@ import br.com.sprintBanco.beans.Pix;
 import br.com.sprintBanco.beans.Seguro;
 import br.com.sprintBanco.beans.TipoBandeira;
 import br.com.sprintBanco.beans.TipoSeguro;
+import br.com.sprintBanco.bo.ApoliceBo;
 import br.com.sprintBanco.bo.CartaoBo;
 import br.com.sprintBanco.bo.CartaoCreditoBo;
 import br.com.sprintBanco.bo.CartaoDebitoBo;
@@ -45,7 +47,9 @@ public class Main {
 		PixBo cadastrarPix = new PixBo();
 		CartaoBo ativarCartao = new CartaoBo();
 		SeguroBo contratarSeguro = new SeguroBo();
+		ApoliceBo contratarApolice = new ApoliceBo();
 		
+		Apolice apolice = new Apolice();
 		Cliente cliente = new Cliente();
 		Endereco endereco = new Endereco();
 		Pix pix = new Pix();
@@ -54,7 +58,7 @@ public class Main {
 		Cartao cartao = new Cartao();
 		CartaoDebito cartaoD = new CartaoDebito();
 		CartaoCredito cartaoC = new CartaoCredito();
-		
+
 		String cpf, nome, dt, repete;
 		int op;
 		do {
@@ -386,7 +390,7 @@ public class Main {
 										} else {
 											System.out.println("Cartão desativado");
 										}
-									} else if (opcao == 8) { //Contratar Seguro
+									} else if (opcaoCredito == 8) { // Contratar Seguro
 										if (contaC.getCartao().getCartaoCredito().isCartaoAtivo()) {
 											System.out.println("Qual seguro deseja contratar: ");
 											System.out.println("1 - Seguro Morte");
@@ -395,15 +399,30 @@ public class Main {
 											int opcaoSeguro = ler.nextInt();
 											HashMap<TipoSeguro, Seguro> seguros = new HashMap();
 											seguros = contratarSeguro.popularSeguros();
+											Seguro seguro = new Seguro();
 											if (opcaoSeguro == 1) {
-												
+												seguro = seguros.get(TipoSeguro.MORTE);
 											} else if (opcaoSeguro == 2) {
-
+												seguro = seguros.get(TipoSeguro.INVALIDEZ);
 											} else if (opcaoSeguro == 3) {
-												
+												seguro = seguros.get(TipoSeguro.DESEMPREGO);
 											} else {
 												System.out.println("Opção invalida");
 											}
+											System.out.println("	Detalhes do Seguro: ");
+											System.out.println("Seguro " + seguro.getNome());
+											System.out.println("Valor: " + seguro.getValorAnual());
+											System.out.println("Regras: " + seguro.getRegras());
+
+											System.out.println("Deseja contratar o serviço: \n1-Sim \2-Não");
+											int contrato = ler.nextInt();
+											if (contrato == 1) {
+												apolice = contratarApolice.salvarApolice(seguro);
+												contaC.getCartao().getCartaoCredito().setApolice(apolice);
+											} else {
+
+											}
+
 										} else {
 											System.out.println("Cartão desativado");
 										}
