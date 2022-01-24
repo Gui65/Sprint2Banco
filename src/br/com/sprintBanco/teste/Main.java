@@ -48,7 +48,7 @@ public class Main {
 		CartaoBo ativarCartao = new CartaoBo();
 		SeguroBo contratarSeguro = new SeguroBo();
 		ApoliceBo contratarApolice = new ApoliceBo();
-		
+
 		Apolice apolice = new Apolice();
 		Cliente cliente = new Cliente();
 		Endereco endereco = new Endereco();
@@ -414,13 +414,22 @@ public class Main {
 											System.out.println("Valor: " + seguro.getValorAnual());
 											System.out.println("Regras: " + seguro.getRegras());
 
-											System.out.println("Deseja contratar o serviço: \n1-Sim \2-Não");
+											System.out.println("Deseja contratar o serviço: \n1-Sim 2-Não");
 											int contrato = ler.nextInt();
 											if (contrato == 1) {
 												apolice = contratarApolice.salvarApolice(seguro);
 												contaC.getCartao().getCartaoCredito().setApolice(apolice);
-											} else {
+												System.out.println("Data do contrato: " + contaC.getCartao()
+														.getCartaoCredito().getApolice().getDataAssinatura());
+												System.out.println("Data para finalizar a carência: " + contaC
+														.getCartao().getCartaoCredito().getApolice().getDataCarencia());
+												double valor = contaC.getCartao().getCartaoCredito().getApolice()
+														.getSeguro().getValorAnual();
+												ativarCartaoC.compraCredito(valor, contaC); // Desconta valor do seguro
+																							// no Cartão de crédito
 
+											} else {
+												continue;
 											}
 
 										} else {
@@ -532,7 +541,7 @@ public class Main {
 					System.out.println("Você não tem uma conta poupança!");
 				} else {
 					System.out.println(
-							"LOGADO COM SUCESSO! \nSeja Bem vindo novamente: " + contaC.getCliente().getNome());
+							"LOGADO COM SUCESSO! \nSeja Bem vindo novamente: " + contaP.getCliente().getNome());
 					do {
 						double v;
 						System.out.println("-------------------" + "\nMENU CONTA POUPANÇA" + "\n---------------------");
@@ -635,6 +644,7 @@ public class Main {
 									System.out.println("5 - Desabilitar Cartão de crédito");
 									System.out.println("6 - Comprar");
 									System.out.println("7 - Pagar Fatura");
+									System.out.println("8 - Contratar seguro");
 									int opcaoCredito = ler.nextInt();
 
 									if (opcaoCredito == 1) { // Ativa Função crédito
@@ -721,6 +731,51 @@ public class Main {
 											} else {
 												System.out.println("Saldo insuficiente!");
 											}
+										} else {
+											System.out.println("Cartão desativado");
+										}
+									} else if (opcaoCredito == 8) { // Contratar Seguro
+										if (contaP.getCartao().getCartaoCredito().isCartaoAtivo()) {
+											System.out.println("Qual seguro deseja contratar: ");
+											System.out.println("1 - Seguro Morte");
+											System.out.println("2 - Seguro Invalidez");
+											System.out.println("3 - Seguro Desemprego");
+											int opcaoSeguro = ler.nextInt();
+											HashMap<TipoSeguro, Seguro> seguros = new HashMap();
+											seguros = contratarSeguro.popularSeguros();
+											Seguro seguro = new Seguro();
+											if (opcaoSeguro == 1) {
+												seguro = seguros.get(TipoSeguro.MORTE);
+											} else if (opcaoSeguro == 2) {
+												seguro = seguros.get(TipoSeguro.INVALIDEZ);
+											} else if (opcaoSeguro == 3) {
+												seguro = seguros.get(TipoSeguro.DESEMPREGO);
+											} else {
+												System.out.println("Opção invalida");
+											}
+											System.out.println("	Detalhes do Seguro: ");
+											System.out.println("Seguro " + seguro.getNome());
+											System.out.println("Valor: " + seguro.getValorAnual());
+											System.out.println("Regras: " + seguro.getRegras());
+
+											System.out.println("Deseja contratar o serviço: \n1-Sim 2-Não");
+											int contrato = ler.nextInt();
+											if (contrato == 1) {
+												apolice = contratarApolice.salvarApolice(seguro);
+												contaP.getCartao().getCartaoCredito().setApolice(apolice);
+												System.out.println("Data do contrato: " + contaP.getCartao()
+														.getCartaoCredito().getApolice().getDataAssinatura());
+												System.out.println("Data para finalizar a carência: " + contaP
+														.getCartao().getCartaoCredito().getApolice().getDataCarencia());
+												double valor = contaP.getCartao().getCartaoCredito().getApolice()
+														.getSeguro().getValorAnual();
+												ativarCartaoC.compraCreditoPoupanca(valor, contaP); // Desconta valor do seguro
+																							// no Cartão de crédito
+
+											} else {
+												continue;
+											}
+
 										} else {
 											System.out.println("Cartão desativado");
 										}

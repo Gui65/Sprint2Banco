@@ -7,6 +7,7 @@ public class Apolice {
 	private String id;
 	private double valorApolice;
 	private String descricaoCondicoes;
+	private Date dataAssinatura;
 	private Date dataCarencia;
 	private Seguro seguro;
 
@@ -50,6 +51,12 @@ public class Apolice {
 		this.seguro = seguro;
 	}
 
-	
+	public Date getDataAssinatura() {
+		return dataAssinatura;
+	}
+
+	public void setDataAssinatura(Date dataAssinatura) {
+		this.dataAssinatura = dataAssinatura;
+	}
 
 }
