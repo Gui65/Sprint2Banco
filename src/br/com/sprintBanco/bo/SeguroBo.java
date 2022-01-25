@@ -15,6 +15,7 @@ public class SeguroBo {
 		Seguro seguroMorte = new Seguro();
 		seguroMorte.setNome("Morte");
 		seguroMorte.setValorAnual(36.00);
+		seguroMorte.setTipoSeguro(TipoSeguro.MORTE);
 		seguroMorte.setId(UUID.randomUUID().toString());
 		String regrasMorte = "\ni .Indenização por despesas médico-hospitalares, ou por perda parcial ou total do funcionamento dos membros ou órgãos;"
 				+ "\nii. Reembolso de custos em diagnóstico de doenças graves, como infarto, acidente vascular cerebral e câncer"
@@ -26,6 +27,7 @@ public class SeguroBo {
 		Seguro seguroInvalidez = new Seguro();
 		seguroInvalidez.setNome("Invalidez");
 		seguroInvalidez.setValorAnual(26.00);
+		seguroInvalidez.setTipoSeguro(TipoSeguro.INVALIDEZ);
 		seguroInvalidez.setId(UUID.randomUUID().toString());
 		String regrasInvalidez = "\ni. Invalidez parcial: ocorre quando há uma perda parcial das funções. Por exemplo, uma pessoa que sofre um acidente e perda a visão em um só dos olhos."
 				+ "\nii. Invalidez total: ocorre quando há uma perda total das funções. Intuitivamente, um bom exemplo seria o caso onde a pessoa sofre um acidente e perde a visão em ambos os olhos."
@@ -36,6 +38,7 @@ public class SeguroBo {
 		Seguro seguroDesemprego = new Seguro();
 		seguroDesemprego.setNome("Desemprego");
 		seguroDesemprego.setValorAnual(16.00);
+		seguroDesemprego.setTipoSeguro(TipoSeguro.DESEMPREGO);
 		seguroDesemprego.setId(UUID.randomUUID().toString());
 		String regrasDesemprego = "\ni. Necessário trabalhar com registro CLT, com o tempo mínimo de estabilidade de 12 meses."
 				+ "\nii. Válido apenas para desligamento involuntários e sem justa causa."

@@ -1,6 +1,8 @@
 package br.com.sprintBanco.beans;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 public class Apolice {
 
@@ -9,8 +11,13 @@ public class Apolice {
 	private String descricaoCondicoes;
 	private Date dataAssinatura;
 	private Date dataCarencia;
-	private Seguro seguro;
+	private List <Seguro> seguro;
 
+	public Apolice() {
+		List <Seguro> listaSeguro = new ArrayList();
+		setSeguro(listaSeguro);
+	}
+	
 	public String getId() {
 		return id;
 	}
@@ -43,11 +50,11 @@ public class Apolice {
 		this.dataCarencia = dataCarencia;
 	}
 
-	public Seguro getSeguro() {
+	public List<Seguro> getSeguro() {
 		return seguro;
 	}
 
-	public void setSeguro(Seguro seguro) {
+	public void setSeguro(List<Seguro> seguro) {
 		this.seguro = seguro;
 	}
 

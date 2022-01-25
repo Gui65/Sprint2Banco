@@ -1,6 +1,6 @@
 package br.com.sprintBanco.beans;
 
-
+import java.util.Date;
 
 public class Seguro {
 
@@ -9,7 +9,8 @@ public class Seguro {
 	private String regras;
 	private double valorAnual;
 	private TipoSeguro tipoSeguro;
-
+	private Date dataSeguro;
+	
 	public double getValorAnual() {
 		return valorAnual;
 	}
@@ -49,5 +50,15 @@ public class Seguro {
 	public void setTipoSeguro(TipoSeguro tipoSeguro) {
 		this.tipoSeguro = tipoSeguro;
 	}
+
+	public Date getDataSeguro() {
+		return dataSeguro;
+	}
+
+	public void setDataSeguro(Date dataSeguro) {
+		this.dataSeguro = dataSeguro;
+	}
+	
+	
 
 }

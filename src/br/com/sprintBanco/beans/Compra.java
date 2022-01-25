@@ -11,6 +11,7 @@ public class Compra {
 
 		this.valor = valor;
 		this.date = date;
+		
 	}
 
 	public double getValor() {

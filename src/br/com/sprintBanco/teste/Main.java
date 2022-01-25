@@ -1,6 +1,8 @@
 package br.com.sprintBanco.teste;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Scanner;
@@ -301,6 +303,8 @@ public class Main {
 									System.out.println("6 - Comprar");
 									System.out.println("7 - Pagar fatura");
 									System.out.println("8 - Contratar Seguro");
+									System.out.println("9 - Consultar Seguro");
+									System.out.println("10 - Cancelar Seguro");
 									int opcaoCredito = ler.nextInt();
 
 									if (opcaoCredito == 1) { // Ativa Função crédito
@@ -392,49 +396,75 @@ public class Main {
 										}
 									} else if (opcaoCredito == 8) { // Contratar Seguro
 										if (contaC.getCartao().getCartaoCredito().isCartaoAtivo()) {
-											System.out.println("Qual seguro deseja contratar: ");
-											System.out.println("1 - Seguro Morte");
-											System.out.println("2 - Seguro Invalidez");
-											System.out.println("3 - Seguro Desemprego");
-											int opcaoSeguro = ler.nextInt();
-											HashMap<TipoSeguro, Seguro> seguros = new HashMap();
-											seguros = contratarSeguro.popularSeguros();
-											Seguro seguro = new Seguro();
-											if (opcaoSeguro == 1) {
-												seguro = seguros.get(TipoSeguro.MORTE);
-											} else if (opcaoSeguro == 2) {
-												seguro = seguros.get(TipoSeguro.INVALIDEZ);
-											} else if (opcaoSeguro == 3) {
-												seguro = seguros.get(TipoSeguro.DESEMPREGO);
-											} else {
-												System.out.println("Opção invalida");
-											}
-											System.out.println("	Detalhes do Seguro: ");
-											System.out.println("Seguro " + seguro.getNome());
-											System.out.println("Valor: " + seguro.getValorAnual());
-											System.out.println("Regras: " + seguro.getRegras());
+											int opSeguro = 0;
+											List<Seguro> listaSeguros = new ArrayList();
+											do {
+												System.out.println("Qual seguro deseja contratar: ");
+												System.out.println("1 - Seguro Morte");
+												System.out.println("2 - Seguro Invalidez");
+												System.out.println("3 - Seguro Desemprego");
+												int opcaoSeguro = ler.nextInt();
+												HashMap<TipoSeguro, Seguro> seguros = new HashMap();
+												seguros = contratarSeguro.popularSeguros();
+												Seguro seguro = new Seguro();
+												if (opcaoSeguro == 1) {
+													seguro = seguros.get(TipoSeguro.MORTE);
+												} else if (opcaoSeguro == 2) {
+													seguro = seguros.get(TipoSeguro.INVALIDEZ);
+												} else if (opcaoSeguro == 3) {
+													seguro = seguros.get(TipoSeguro.DESEMPREGO);
+												} else {
+													System.out.println("Opção invalida");
+												}
+												System.out.println("	Detalhes do Seguro: ");
+												System.out.println("Seguro " + seguro.getNome());
+												System.out.println("Valor: " + seguro.getValorAnual());
+												System.out.println("Regras: " + seguro.getRegras());
 
-											System.out.println("Deseja contratar o serviço: \n1-Sim 2-Não");
-											int contrato = ler.nextInt();
-											if (contrato == 1) {
-												apolice = contratarApolice.salvarApolice(seguro);
-												contaC.getCartao().getCartaoCredito().setApolice(apolice);
-												System.out.println("Data do contrato: " + contaC.getCartao()
-														.getCartaoCredito().getApolice().getDataAssinatura());
-												System.out.println("Data para finalizar a carência: " + contaC
-														.getCartao().getCartaoCredito().getApolice().getDataCarencia());
-												double valor = contaC.getCartao().getCartaoCredito().getApolice()
-														.getSeguro().getValorAnual();
-												ativarCartaoC.compraCredito(valor, contaC); // Desconta valor do seguro
-																							// no Cartão de crédito
+												System.out.println("Deseja contratar o serviço: \n1-Sim 2-Não");
+												int contrato = ler.nextInt();
+												if (contrato == 1) {
+													seguro.setDataSeguro(new Date());
+													listaSeguros.add(seguro);
+													double valor = seguro.getValorAnual();
+													ativarCartaoC.compraCredito(valor, contaC); // Desconta valor do
+																								// seguro
+																								// no Cartão de crédito
 
-											} else {
-												continue;
-											}
+												} else {
+													continue;
+												}
+												System.out.println("Deseja contratar mais um seguro: \n1-Sim \n2-Não");
+												opSeguro = ler.nextInt();
 
+											} while (opSeguro == 1);
+											apolice = contratarApolice.salvarApolice(listaSeguros);
+											contaC.getCartao().getCartaoCredito().setApolice(apolice);
+											System.out.println("Data do contrato: " + contaC.getCartao()
+													.getCartaoCredito().getApolice().getDataAssinatura());
+											System.out.println("Data para finalizar a carência: " + contaC.getCartao()
+													.getCartaoCredito().getApolice().getDataCarencia());
 										} else {
 											System.out.println("Cartão desativado");
 										}
+
+									} else if (opcaoCredito == 9) {
+										if (contaC.getCartao().getCartaoCredito().isCartaoAtivo()) {
+											SimpleDateFormat sdfComHora = new SimpleDateFormat("dd/MM/yyy HH:mm:ss");
+											List<Seguro> listSeguros = contaC.getCartao().getCartaoCredito()
+													.getApolice().getSeguro();
+											for (Seguro seguros : listSeguros) {
+												String dataDaContratacao = sdfComHora.format(seguros.getDataSeguro());
+												System.out.println("Tipo do Seguro: " + seguros.getTipoSeguro());
+												System.out.println("Valor anual do seguro: " + seguros.getValorAnual());
+												System.out.println("Contratado  no dia: " + dataDaContratacao);
+											}
+										} else {
+											System.out.println("Cartão desativado");
+										}
+									} else if (opcaoCredito == 10) {
+										apolice = contratarApolice.cancelarSeguro();
+										contaC.getCartao().getCartaoCredito().setApolice(apolice);
 									}
 								} else if (opcao == 2) { // MENU DEBITO
 									System.out.println(
@@ -544,13 +574,15 @@ public class Main {
 							"LOGADO COM SUCESSO! \nSeja Bem vindo novamente: " + contaP.getCliente().getNome());
 					do {
 						double v;
-						System.out.println("-------------------" + "\nMENU CONTA POUPANÇA" + "\n---------------------");
-						System.out.println("1 - Sacar");
-						System.out.println("2 - Depositar");
-						System.out.println("3 - Transferir para conta Corrente");
-						System.out.println("4 - Consultar");
-						System.out.println("5 - Cartão");
-						System.out.println("6 - Sair");
+						System.out.println("=================================" + "\nMENU CONTA POUPANÇA"
+								+ "\n=================================");
+						System.out.println("|	1 - Sacar		|");
+						System.out.println("|	2 - Depositar		|");
+						System.out.println("|	3 - Transferir		|");
+						System.out.println("|	4 - Consultar		|");
+						System.out.println("|	5 - Cartão		|");
+						System.out.println("|	6 - Sair		|");
+						System.out.println("=================================");
 						opcaoP = ler.nextInt();
 						switch (opcaoP) {
 						case 1:
@@ -645,6 +677,8 @@ public class Main {
 									System.out.println("6 - Comprar");
 									System.out.println("7 - Pagar Fatura");
 									System.out.println("8 - Contratar seguro");
+									System.out.println("9 - Consultar seguro");
+									System.out.println("10 - Cancelar seguro");
 									int opcaoCredito = ler.nextInt();
 
 									if (opcaoCredito == 1) { // Ativa Função crédito
@@ -736,49 +770,74 @@ public class Main {
 										}
 									} else if (opcaoCredito == 8) { // Contratar Seguro
 										if (contaP.getCartao().getCartaoCredito().isCartaoAtivo()) {
-											System.out.println("Qual seguro deseja contratar: ");
-											System.out.println("1 - Seguro Morte");
-											System.out.println("2 - Seguro Invalidez");
-											System.out.println("3 - Seguro Desemprego");
-											int opcaoSeguro = ler.nextInt();
-											HashMap<TipoSeguro, Seguro> seguros = new HashMap();
-											seguros = contratarSeguro.popularSeguros();
-											Seguro seguro = new Seguro();
-											if (opcaoSeguro == 1) {
-												seguro = seguros.get(TipoSeguro.MORTE);
-											} else if (opcaoSeguro == 2) {
-												seguro = seguros.get(TipoSeguro.INVALIDEZ);
-											} else if (opcaoSeguro == 3) {
-												seguro = seguros.get(TipoSeguro.DESEMPREGO);
-											} else {
-												System.out.println("Opção invalida");
-											}
-											System.out.println("	Detalhes do Seguro: ");
-											System.out.println("Seguro " + seguro.getNome());
-											System.out.println("Valor: " + seguro.getValorAnual());
-											System.out.println("Regras: " + seguro.getRegras());
+											int opSeguro = 0;
+											List<Seguro> listaSeguros = new ArrayList();
+											do {
+												System.out.println("Qual seguro deseja contratar: ");
+												System.out.println("1 - Seguro Morte");
+												System.out.println("2 - Seguro Invalidez");
+												System.out.println("3 - Seguro Desemprego");
+												int opcaoSeguro = ler.nextInt();
+												HashMap<TipoSeguro, Seguro> seguros = new HashMap();
+												seguros = contratarSeguro.popularSeguros();
+												Seguro seguro = new Seguro();
+												if (opcaoSeguro == 1) {
+													seguro = seguros.get(TipoSeguro.MORTE);
+												} else if (opcaoSeguro == 2) {
+													seguro = seguros.get(TipoSeguro.INVALIDEZ);
+												} else if (opcaoSeguro == 3) {
+													seguro = seguros.get(TipoSeguro.DESEMPREGO);
+												} else {
+													System.out.println("Opção invalida");
+												}
+												System.out.println("	Detalhes do Seguro: ");
+												System.out.println("Seguro " + seguro.getNome());
+												System.out.println("Valor: " + seguro.getValorAnual());
+												System.out.println("Regras: " + seguro.getRegras());
 
-											System.out.println("Deseja contratar o serviço: \n1-Sim 2-Não");
-											int contrato = ler.nextInt();
-											if (contrato == 1) {
-												apolice = contratarApolice.salvarApolice(seguro);
-												contaP.getCartao().getCartaoCredito().setApolice(apolice);
-												System.out.println("Data do contrato: " + contaP.getCartao()
-														.getCartaoCredito().getApolice().getDataAssinatura());
-												System.out.println("Data para finalizar a carência: " + contaP
-														.getCartao().getCartaoCredito().getApolice().getDataCarencia());
-												double valor = contaP.getCartao().getCartaoCredito().getApolice()
-														.getSeguro().getValorAnual();
-												ativarCartaoC.compraCreditoPoupanca(valor, contaP); // Desconta valor do seguro
-																							// no Cartão de crédito
+												System.out.println("Deseja contratar o serviço: \n1-Sim 2-Não");
+												int contrato = ler.nextInt();
+												if (contrato == 1) {
+													seguro.setDataSeguro(new Date());
+													listaSeguros.add(seguro);
+													double valor = seguro.getValorAnual();
+													ativarCartaoC.compraCredito(valor, contaC); // Desconta valor do
+																								// seguro
+																								// no Cartão de crédito
 
-											} else {
-												continue;
-											}
+												} else {
+													continue;
+												}
+												System.out.println("Deseja contratar mais um seguro: \n1-Sim \n2-Não");
+												opSeguro = ler.nextInt();
 
+											} while (opSeguro == 1);
+											apolice = contratarApolice.salvarApolice(listaSeguros);
+											contaP.getCartao().getCartaoCredito().setApolice(apolice);
+											System.out.println("Data do contrato: " + contaP.getCartao()
+													.getCartaoCredito().getApolice().getDataAssinatura());
+											System.out.println("Data para finalizar a carência: " + contaP.getCartao()
+													.getCartaoCredito().getApolice().getDataCarencia());
 										} else {
 											System.out.println("Cartão desativado");
 										}
+									} else if (opcaoCredito == 9) {
+										if (contaP.getCartao().getCartaoCredito().isCartaoAtivo()) {
+											SimpleDateFormat sdfComHora = new SimpleDateFormat("dd/MM/yyy HH:mm:ss");
+											List<Seguro> listSeguros = contaP.getCartao().getCartaoCredito()
+													.getApolice().getSeguro();
+											for (Seguro seguros : listSeguros) {
+												String dataDaContratacao = sdfComHora.format(seguros.getDataSeguro());
+												System.out.println("Tipo do Seguro: " + seguros.getTipoSeguro());
+												System.out.println("Valor anual do seguro: " + seguros.getValorAnual());
+												System.out.println("Contratado  no dia: " + dataDaContratacao);
+											}
+										} else {
+											System.out.println("Cartão desativado");
+										}
+									} else if (opcaoCredito == 10) {
+										apolice = contratarApolice.cancelarSeguro();
+										contaP.getCartao().getCartaoCredito().setApolice(apolice);
 									}
 								} else if (opcao == 2) { // MENU DEBITO
 									System.out.println(
